@@ -1,1 +1,1 @@
-Welcome to iotspot documentation 
+iotspot documentation 
