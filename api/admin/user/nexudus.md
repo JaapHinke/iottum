@@ -1,12 +1,12 @@
-# [api](../..)/[admin](..)/user with _Nexudus_
+# [api](../..)/[admin](..)/user/* actions with _Nexudus_
 
-## Mapping _Nexudus_ locations and plans to _iotspot_ organizations and locations
+### Mapping _Nexudus_ locations and plans to _iotspot_ organizations and locations
 
-### Mapping to iotspot organization
+#### Mapping to iotspot organization
 
 Typically, all _locations_ and _plans_ for a single Nexudus integration are associated with single iotspot _organization_. If this is not the case, then the _location_ (and/or _plan_) needs to be mapped to the desired iotspot _organization_.
 
-### Mapping to iotspot location(s)
+#### Mapping to iotspot location(s)
 
 Nexudus locations and iotspot locations are slightly different:
 * a Nexudus location is a single physical location or office building
@@ -18,7 +18,7 @@ A iotspot location can contain _all_ of the workspaces for a physical location o
 
 But a iotspot location can also contain only _a subset_ of the workspaces, in which case the Nexudus plan helps determine which iotspot location(s) are associated with a Nexudus location. A Nexudus plan can then be associated with one or more iotspot locations to allow a model where both standard and premium workspaces within a single Nexudus location can be offered in a single plan. In this case, the combination of a Nexudus _location_ and _plan_ maps to one or more iotspot _locations_.
 
-### Nexudus ids required for mapping
+#### Nexudus ids required for mapping
 
 The Nexudus ids used in the above mapping can be determined as follows:
 * the _location id_ of each location that allows iotspot access:<br/>
@@ -29,7 +29,7 @@ navigate to [Inventory → Plans](https://platform.nexudus.com/billing/tariffs?T
 The mapping between Nexudus location ids and plan ids on the one hand, and iotspot organization id and location ids on the other hand, is maintained by iotspot. It can currently not be edited in real-time through the iotspot API.
 
 
-## Setting up the integration with iotspot for a given location
+### Setting up the integration with iotspot for a given location
 
 The integration with iotspot is done via _webhooks_. Navigate to [Settings → Integrations → Webhooks](https://platform.nexudus.com/settings/integrations/options/webhooks) in the Nexudus dashboard.
 
@@ -53,9 +53,9 @@ Then add webhooks for the following events:
 
 
 
-## Handling Nexudus webhook requests
+### Handling Nexudus webhook requests
 
-### Nexudus `Activate coworker contract` webhook
+#### Nexudus `Activate coworker contract` webhook
 
 A user activation request from the Nexudus `Activate coworker contract` webhook is processed as follows:
 * the user is identified by email (`CoworkerEmail` in the webhook request)
@@ -64,7 +64,7 @@ A user activation request from the Nexudus `Activate coworker contract` webhook 
 If the user account did not yet exist, the `CoworkerFullName` in the webhook request will be used as the name in iotspot.
 
 
-### Nexudus `Cancel coworker contract` webhook
+#### Nexudus `Cancel coworker contract` webhook
 
 A user activation request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
 * the user is identified by email (`CoworkerEmail` in the webhook request)
