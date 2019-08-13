@@ -1,4 +1,4 @@
-## [admin](..)/[user](.)/activate
+## [api](../..)/[admin](..)/[user](.)/activate
 
 Associates a user with an organization and, optionally, a set of locations.
 
