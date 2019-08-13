@@ -1,4 +1,4 @@
-# [api](../..)/[admin](..)/user with Nexudus
+# [api](../../..)/[admin](../..)/user with _Nexudus_
 
 ## Mapping _Nexudus_ locations and plans to _iotspot_ organizations and locations
 
