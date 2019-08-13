@@ -21,9 +21,9 @@ But a iotspot location can also contain only _a subset_ of the workspaces, in wh
 ### Nexudus ids required for mapping
 
 The Nexudus ids used in the above mapping can be determined as follows:
-* the _location id_ of each location that allows iotspot access:\
+* the _location id_ of each location that allows iotspot access:<br/>
 navigate to [Settings → General](https://platform.nexudus.com/settings/general) in the Nexudus dashboard, see **Location #**
-* the _plan id_ of each plan that allows iotspot:\
+* the _plan id_ of each plan that allows iotspot:<br/>
 navigate to [Inventory → Plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false), then click the relevant plan and find the plan id at the end of the URL; eg, `https://platform.nexudus.com/billing/tariffs/1082164083`, the plan id is `1082164083`.
 
 The mapping between Nexudus location ids and plan ids on the one hand, and iotspot organization id and location ids on the other hand, is maintained by iotspot. It can currently not be edited in real-time through the iotspot API.
