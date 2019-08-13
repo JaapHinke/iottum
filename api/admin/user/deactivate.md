@@ -1,6 +1,6 @@
-## admin/user/deactivate
+## [api](../..)/[admin](..)/[user](.)/deactivate
 
-Associates a user with an organization and, optionally, a set of locations.
+Removes the association of a user with an organization, and removes any preferred locations.
 
 
 #### Required inputs
