@@ -1,3 +1,5 @@
+## [api](..)/[admin](.)/user
+
 User administration
 
 * [user/activate](user/activate)
