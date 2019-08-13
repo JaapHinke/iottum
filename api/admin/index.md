@@ -2,7 +2,7 @@
 
 ## User administration
 
-* [user/activate](user/activate) \
+* [user/activate](user/activate)<br>
 Associates the user account with an organization and, optionally, a subset of locations.
 
 * [user/deactivate](user/deactivate) \
