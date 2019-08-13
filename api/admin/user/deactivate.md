@@ -1,4 +1,4 @@
-## [api](../..)/[admin](..)/[user](.)/deactivate
+## [api](../..)/[admin](..)/user/deactivate
 
 Removes the association of a user with an organization, and removes any preferred locations.
 
