@@ -10,5 +10,5 @@ Removes the association between the user account and the organization.
 
 ### Notes
 
-* [Nexudus](user/nexudus)<br/>
+* [Nexudus](user/nexudus.md)<br/>
 Details on user administration actions with a Nexudus integration.
