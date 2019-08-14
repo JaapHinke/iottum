@@ -4,30 +4,56 @@
 
 #### Mapping to iotspot organization
 
-Typically, all _locations_ and _plans_ for a single Nexudus integration are associated with single iotspot _organization_. If this is not the case, then the _location_ (and/or _plan_) needs to be mapped to the desired iotspot _organization_.
+Typically, all _locations_ and _plans_ for a single Nexudus integration are associated with single iotspot _organization_. If this is not the case, then the _location_ (possibly combined with a _plan_) needs to be mapped to the desired iotspot _organization_.
 
 #### Mapping to iotspot location(s)
 
 Nexudus locations and iotspot locations are slightly different:
-* a Nexudus location is a single physical location or office building
+* a Nexudus location is typically a single physical location or office building
 * a iotspot location is a collection of workspaces associated with a single physical location or office building.
 
-They may therefore not be equivalent.
+Therefore, depending on the set-up of both, they may or may not map directly.
 
-A iotspot location can contain _all_ of the workspaces for a physical location or office building, in which case a Nexudus _location_ maps directly to a iotspot _location_. 
+A iotspot location can contain _all_ of the workspaces for a physical location or office building, in which case a typical Nexudus _location_ maps directly to a iotspot _location_. But a iotspot location can also contain only _a subset_ of the workspaces, in which case the Nexudus plan is used to help determine the associated iotspot location(s).
 
-But a iotspot location can also contain only _a subset_ of the workspaces, in which case the Nexudus plan helps determine which iotspot location(s) are associated with a Nexudus location. A Nexudus plan can then be associated with one or more iotspot locations to allow a model where both standard and premium workspaces within a single Nexudus location can be offered in a single plan. In this case, the combination of a Nexudus _location_ and _plan_ maps to one or more iotspot _locations_.
+Also, because not all plans may include iotspot access, the mapping to iotspot locations always require a Nexudus location and a Nexudus plan.
 
-#### Nexudus ids required for mapping
+Finally, because a single plan may provide access to multiple iotspot locations (for example, both standard and premium workspaces in a single location), the combination of Nexudus location and plan may map to either one or multiple iotspot locations.
+
+#### Sample mapping file
+
+The mapping between Nexudus location ids and plan ids on the one hand, and iotspot organization id and location ids on the other hand, is maintained by iotspot. It can currently not be edited in real-time through the iotspot API.
+
+The `description` fields are optional.
+
+A basic example of the mapping: 
+```
+{
+  "9082452071": {                           // Nexudus location id
+    "description": "ACME London Office",
+    "organization_id": "534342",                // iotspot organization id
+    "locations_by_plan": {
+      "7083029964": {                           // Nexudus plan id
+        "description": "Standard Plan",
+        "location_ids": "37536233"                // iotspot location id
+      },
+      "7114954842": {                           // Nexudus plan id
+        "description": "Premium Plan",
+        "location_ids": "37536233, 37536234"     // iotspot location ids
+      }
+    }
+  },
+  [...]
+}
+```
+
+#### Determining the Nexudus ids required for mapping
 
 The Nexudus ids used in the above mapping can be determined as follows:
 * the _location id_ of each location that allows iotspot access:<br/>
 navigate to [Settings → General](https://platform.nexudus.com/settings/general) in the Nexudus dashboard, see **Location #**
 * the _plan id_ of each plan that allows iotspot:<br/>
 navigate to [Inventory → Plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false), then click the relevant plan and find the plan id at the end of the URL; eg, `https://platform.nexudus.com/billing/tariffs/1082164083`, the plan id is `1082164083`.
-
-The mapping between Nexudus location ids and plan ids on the one hand, and iotspot organization id and location ids on the other hand, is maintained by iotspot. It can currently not be edited in real-time through the iotspot API.
-
 
 ### Setting up the integration with iotspot for a given location
 
