@@ -104,7 +104,6 @@ The corresponding Nexudus webhook event will fire within about 1 minute from an 
 
 Actions triggering a Nexudus `Activate coworker contract` webhook event:
 * a new user is created with a plan that allows iotspot access  
-In iotspot: Start app and sign in with new user’s email, should show appropriate location(s)/workspaces immediately.
 * an existing user purchases a plan that allows iotspot access
 * an existing user changes to a plan that allows iotspot access
 
@@ -118,9 +117,11 @@ Note that deleting an entire location in Nexudus will not deactivate iotspot use
 
 ## iotspot app behavior
 
-In the iotspot app, changes in accessible locations will be reflected when the app is opened (brought to the foreground). If the user happens to use the app while the change takes place, then the app will not reflect this immediately. Once the user switches to another app (or the homescreen) and back to the iotspot app, the location changes will be reflected.
+If a user is newly activated and has not used the iotspot app before, the user can start the app and sign in with same email address as used in Nexedus. The app will show appropriate location(s)/workspaces immediately.
 
-If a user was activated or deactivated, and the app is reopened, it will show a dialog box saying `Company not allowed` and the user can only tap `OK`. The app will then show the appropriate locations (if an account was deactivated, these locations will be demo location).
+For existing users that have already used the iotspot app before, any changes in accessible locations will be reflected when the app is opened (brought to the foreground). If the user happens to be using the app while the change takes place, then the app will not reflect this immediately. Once the user switches to another app (or the homescreen) and then back to the iotspot app, the location changes will be reflected.
+
+If a user was activated or deactivated, and the app is reopened, it will also show a dialog box saying `Company not allowed` and the user can tap `OK`. The app will then show the appropriate locations (if an account was deactivated, these locations will be demo locations).
 
 
 ## Background: How the iotspot API processes Nexudus webhook requests
