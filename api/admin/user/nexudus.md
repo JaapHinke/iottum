@@ -1,6 +1,24 @@
 # [api](../..)/[admin](..)/user/* actions with _Nexudus_
 
-### Mapping _Nexudus_ locations and plans to _iotspot_ organizations and locations
+
+## Assumptions
+
+The integration is based on the assumption that access to iotspot is available with one or more specific plans. See [plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false) in the Nexudus dashboard. 
+
+Once a user (_coworker_ in Nexudus terminology) adds such a plan and it is activated, the corresponding iotspot account will be _activated_ giving access within iotspot to the relevant iotspot locations and workspaces. If there is no corresponding iotspot account yet, it will be created. Note that the activation may happen immediately or be scheduled for a specific date. If the latter, the iotspot account will be activated at that date.
+
+If the user cancels the plan/contract, the iotspot account will be _deactivated_ on the scheduled cancellation date (or immediately, if canceled immediately). When deactivated, the iotspot account can still be used but access to the relevant locations and workspaces will be removed, and only access to a set of demo offices is available.
+
+#### Important
+
+A Nexudus user should, at any given time, at most have one plan that allows iotspot access.
+
+If a user can have more than one plan, the most recent action determines iotspot access, which will give results that will be unexpected for the user. For example, if a user has two plans and then deletes one, the iotspot account will be deactivated, even though the user still has another plan with iotspot access.
+
+A Nexudus user is identified within iotspot by email address. If a Nexudus user changes email address, any subsequent action affecting iotspot access (such as a plan change or cancellation) will cause an API error as the user cannot be found. Please contact iotspot in this case.
+
+
+## Mapping _Nexudus_ locations and plans to _iotspot_ organizations and locations
 
 #### Mapping to iotspot organization
 
@@ -55,9 +73,9 @@ navigate to [Settings → General](https://platform.nexudus.com/settings/general
 * the _plan id_ of each plan that allows iotspot:<br/>
 navigate to [Inventory → Plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false), then click the relevant plan and find the plan id at the end of the URL; eg, `https://platform.nexudus.com/billing/tariffs/1082164083`, the plan id is `1082164083`.
 
-### Setting up the integration with iotspot for a given location
+## Setting up Nexudus integration with iotspot
 
-The integration with iotspot is done via _webhooks_. Navigate to [Settings → Integrations → Webhooks](https://platform.nexudus.com/settings/integrations/options/webhooks) in the Nexudus dashboard.
+The integration with iotspot for a Nexudus location is done via _webhooks_. Navigate to [Settings → Integrations → Webhooks](https://platform.nexudus.com/settings/integrations/options/webhooks) in the Nexudus dashboard.
 
 Enter the **Shared secret** for the iotspot API integration (obtained in a secure manner from iotspot) and click **Manage webhooks**, then click **Add webhook**.
 
@@ -78,8 +96,34 @@ Then add webhooks for the following events:
   * **Active**: set to enabled
 
 
+## Supported Nexudus actions
 
-### Handling Nexudus webhook requests
+The following actions are supported for any location that allows iotspot access.
+
+The corresponding Nexudus webhook event will fire within about 1 minute from an action's completion if the action is set to take place immediately. If the action has a scheduled contract date, the event will fire when the action is completed on that date.
+
+Actions triggering a Nexudus `Activate coworker contract` webhook event:
+* a new user is created with a plan that allows iotspot access  
+In iotspot: Start app and sign in with new user’s email, should show appropriate location(s)/workspaces immediately.
+* an existing user purchases a plan that allows iotspot access
+* an existing user changes to a plan that allows iotspot access
+
+Actions triggering a Nexudus `Cancel coworker contract` webhook event:
+* an existing user cancels a plan that allows iotspot access
+* an existing user changes to a plan that does not allow iotspot access
+* an existing user with a plan that allows iotspot access is deleted
+
+Note that deleting an entire location in Nexudus will not deactivate iotspot users. If an entire location is deleted, the corresponding location(s) in iotspot should be removed as well by iotspot.
+
+
+## iotspot app behavior
+
+In the iotspot app, changes in accessible locations will be reflected when the app is opened (brought to the foreground). If the user happens to use the app while the change takes place, then the app will not reflect this immediately. Once the user switches to another app (or the homescreen) and back to the iotspot app, the location changes will be reflected.
+
+If a user was activated or deactivated, and the app is reopened, it will show a dialog box saying `Company not allowed` and the user can only tap `OK`. The app will then show the appropriate locations (if an account was deactivated, these locations will be demo location).
+
+
+## Background: How the iotspot API processes Nexudus webhook requests
 
 #### Nexudus `Activate coworker contract` webhook
 
@@ -92,6 +136,6 @@ If the user account did not yet exist, the `CoworkerFullName` in the webhook req
 
 #### Nexudus `Cancel coworker contract` webhook
 
-A user activation request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
+A user deactivation request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
 * the user is identified by email (`CoworkerEmail` in the webhook request)
 * the organization is indirectly identified by the Nexudus _location id_  (`IssuedById`)
