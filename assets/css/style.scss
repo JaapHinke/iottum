@@ -1,7 +1,7 @@
 ---
 ---
 
-@import "Minimal";
+@import "{{ site.theme }}";
 
 pre, code {
    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
