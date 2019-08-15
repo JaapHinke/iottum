@@ -18,13 +18,13 @@ Accepted request formats
 
 Either of the following status code will be returned in the response, together with a body in JSON format.
 
-* 200
+* 200  
   includes details on the de-activated user
   
-* 400
+* 400  
   includes details on the problem with the client request
   
-* 500
+* 500  
   may include details on the server problem in the API
 
 
