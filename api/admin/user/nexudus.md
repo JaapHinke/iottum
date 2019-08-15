@@ -115,7 +115,7 @@ Actions triggering a Nexudus `Cancel coworker contract` webhook event:
 Note that deleting an entire location in Nexudus will not deactivate iotspot users. If an entire location is deleted, the corresponding location(s) in iotspot should be removed as well by iotspot.
 
 
-## iotspot app behavior
+#### Corresponding iotspot app behavior
 
 If a user is newly activated and has not used the iotspot app before, the user can start the app and sign in with same email address as used in Nexedus. The app will show appropriate location(s)/workspaces immediately.
 
