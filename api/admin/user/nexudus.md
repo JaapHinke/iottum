@@ -3,7 +3,7 @@
 
 ## Assumptions
 
-The integration is based on the assumption that access to iotspot is available with one or more specific plans. See [plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false) in the Nexudus dashboard. 
+The integration is based on the assumption that access to iotspot is available with one or more specific plans. See [plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false){:target="_blank"} in the Nexudus dashboard. 
 
 Once a user (_coworker_ in Nexudus terminology) adds such a plan and it is activated, the corresponding iotspot account will be _activated_ giving access within iotspot to the relevant iotspot locations and workspaces. If there is no corresponding iotspot account yet, it will be created. Note that the activation may happen immediately or be scheduled for a specific date. If the latter, the iotspot account will be activated at that date.
 
@@ -71,11 +71,11 @@ The Nexudus ids used in the above mapping can be determined as follows:
 * the _location id_ of each location that allows iotspot access:<br/>
 navigate to [Settings → General](https://platform.nexudus.com/settings/general){:target="_blank"} in the Nexudus dashboard, see **Location #**
 * the _plan id_ of each plan that allows iotspot:<br/>
-navigate to [Inventory → Plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false), then click the relevant plan and find the plan id at the end of the URL; eg, `https://platform.nexudus.com/billing/tariffs/1082164083`, the plan id is `1082164083`.
+navigate to [Inventory → Plans](https://platform.nexudus.com/billing/tariffs?Tariff_Archived=false){:target="_blank"}, then click the relevant plan and find the plan id at the end of the URL; eg, `https://platform.nexudus.com/billing/tariffs/1082164083`, the plan id is `1082164083`.
 
 ## Setting up Nexudus integration with iotspot
 
-The integration with iotspot for a Nexudus location is done via _webhooks_. Navigate to [Settings → Integrations → Webhooks](https://platform.nexudus.com/settings/integrations/options/webhooks) in the Nexudus dashboard.
+The integration with iotspot for a Nexudus location is done via _webhooks_. Navigate to [Settings → Integrations → Webhooks](https://platform.nexudus.com/settings/integrations/options/webhooks){:target="_blank"} in the Nexudus dashboard.
 
 Enter the **Shared secret** for the iotspot API integration (obtained in a secure manner from iotspot) and click **Manage webhooks**, then click **Add webhook**.
 
