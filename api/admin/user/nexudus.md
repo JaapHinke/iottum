@@ -85,14 +85,14 @@ Then add webhooks for the following events:
   * **URL**:
     * for testing: `https://api.iotspot.co/test/v1/admin/user/activate`
     * for production: `https://api.iotspot.co/v1/admin/user/activate`
-  * **Description** (suggested): `Allows the iotspot account for this coworker access to this Lendlease location, according to the activated contract. A new iotspot account will be created if this coworker does not have one.`
+  * **Description** (suggested): `Allows the iotspot account for this coworker access to this Nexudus location, according to the activated contract. A new iotspot account will be created if this coworker does not have one.`
   * **Active**: set to enabled
 * **Action**: Cancel coworker contract
   * **Name** (suggested): `Deactivate iotspot for coworker`
   * **URL**: 
     * for testing: `https://api.iotspot.co/test/v1/admin/user/deactivate`
     * for production: `https://api.iotspot.co/v1/admin/user/deactivate`
-  * **Description** (suggested): `Removes access to this Lendlease location for this iotspot account, according to the cancelled contract. (The iotspot account will remain active but only have access to a demo set of offices.)`
+  * **Description** (suggested): `Removes access to this Nexudus location for this iotspot account, according to the cancelled contract. (The iotspot account will remain active but only have access to a demo set of offices.)`
   * **Active**: set to enabled
 
 
