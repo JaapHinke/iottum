@@ -15,7 +15,7 @@ A Nexudus user should, at any given time, at most have one plan that allows iots
 
 If a user can have more than one plan, the most recent action determines iotspot access, which will give results that will be unexpected for the user. For example, if a user has two plans and then deletes one, the iotspot account will be deactivated, even though the user still has another plan with iotspot access.
 
-A Nexudus user is identified within iotspot by email address. If a Nexudus user changes email address, any subsequent action affecting iotspot access (such as a plan change or cancellation) will cause an API error as the user cannot be found. Please contact iotspot in this case.
+If a user is deleted, the assumption is that active plans will be canceled prior to deleting the user. If not, iotspot access will not be deactivated.
 
 
 ## Mapping _Nexudus_ locations and plans to _iotspot_ organizations and locations
