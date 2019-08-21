@@ -110,9 +110,10 @@ Actions triggering a Nexudus `Activate coworker contract` webhook event:
 Actions triggering a Nexudus `Cancel coworker contract` webhook event:
 * an existing user cancels a plan that allows iotspot access
 * an existing user changes to a plan that does not allow iotspot access
-* an existing user is deleted while having a plan that allows iotspot access
 
-Note that deleting an entire location in Nexudus will not deactivate iotspot users. If an entire location is deleted, the corresponding location(s) in iotspot should be removed as well by iotspot.
+**Important**: If an existing user is deleted while still having an active plan that allows iotspot access, then this will not **not** trigger a Nexudus `Cancel coworker contract` webhook event, and iotspot access will not be deactivated. The assumption is that active plans will be canceled prior to deleting the user.
+
+Also note that deleting an entire location in Nexudus will not deactivate iotspot users. If an entire location is deleted, the corresponding location(s) in iotspot should be removed as well by iotspot.
 
 
 #### Corresponding iotspot app behavior
@@ -142,6 +143,6 @@ If the user account did not yet exist, the `CoworkerFullName` in the webhook req
 
 #### Nexudus `Cancel coworker contract` webhook
 
-A iotspot deactivation (contract change or deleted user) request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
+A iotspot deactivation (contract change) request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
 * the user is identified by Nexudus user id (`CoworkerId` in the webhook request), with email (`CoworkerEmail`) as fallback if the user id is not found
 * the organization is indirectly identified by the Nexudus _location id_  (`IssuedById`)
