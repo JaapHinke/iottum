@@ -124,12 +124,17 @@ For existing users that have already used the iotspot app before, any changes in
 If a user was activated or deactivated, and the app is reopened, it will also show a dialog box saying `Company not allowed` and the user can tap `OK`. The app will then show the appropriate locations (if an account was deactivated, these locations will be demo locations).
 
 
+#### Identifying users in iotspot with existing accounts prior to Nexudus activation
+
+Users that already have a iotspot account before their Nexudus account is activated for iotspot will be identified based on their email address. If the email address matches an account in iotspot, that iotspot account will be used for this Nexudus account. From this point on, the Nexudus user id (`CoworkerId` in the webhook request) will be used to match the Nexudus account to the iotspot account, so even if the user changes email address in either Nexudus or iotspot, the accounts remain linked.
+
+
 ## Background: How the iotspot API processes Nexudus webhook requests
 
 #### Nexudus `Activate coworker contract` webhook
 
-A user activation request from the Nexudus `Activate coworker contract` webhook is processed as follows:
-* the user is identified by email (`CoworkerEmail` in the webhook request)
+A iotspot activation (new user or contract change) request from the Nexudus `Activate coworker contract` webhook is processed as follows:
+* the user is identified by Nexudus user id (`CoworkerId` in the webhook request), with email (`CoworkerEmail`) as fallback if the user id is not found
 * the organization and locations are indirectly identified by the combination of the Nexudus _location id_  (`IssuedById`) and _plan id_  (`TariffId`) 
 
 If the user account did not yet exist, the `CoworkerFullName` in the webhook request will be used as the name in iotspot.
@@ -137,6 +142,6 @@ If the user account did not yet exist, the `CoworkerFullName` in the webhook req
 
 #### Nexudus `Cancel coworker contract` webhook
 
-A user deactivation request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
-* the user is identified by email (`CoworkerEmail` in the webhook request)
+A iotspot deactivation (contract change or deleted user) request from the Nexudus `Cancel coworker contract` webhook is processed as follows:
+* the user is identified by Nexudus user id (`CoworkerId` in the webhook request), with email (`CoworkerEmail`) as fallback if the user id is not found
 * the organization is indirectly identified by the Nexudus _location id_  (`IssuedById`)
