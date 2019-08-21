@@ -110,7 +110,7 @@ Actions triggering a Nexudus `Activate coworker contract` webhook event:
 Actions triggering a Nexudus `Cancel coworker contract` webhook event:
 * an existing user cancels a plan that allows iotspot access
 * an existing user changes to a plan that does not allow iotspot access
-* an existing user with a plan that allows iotspot access is deleted
+* an existing user is deleted while having a plan that allows iotspot access
 
 Note that deleting an entire location in Nexudus will not deactivate iotspot users. If an entire location is deleted, the corresponding location(s) in iotspot should be removed as well by iotspot.
 
