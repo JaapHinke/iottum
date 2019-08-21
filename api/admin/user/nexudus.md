@@ -81,7 +81,7 @@ Enter the **Shared secret** for the iotspot API integration (obtained in a secur
 
 Then add webhooks for the following events:
 * **Action**: Activate coworker contract
-  * **Name** (suggested): `Activate iotspot for coworker`
+  * **Name** (suggested): `Activate/update iotspot for coworker`
   * **URL**:
     * for testing: `https://api.iotspot.co/test/admin/user/activate`
     * for production: `https://api.iotspot.co/v1/admin/user/activate`
