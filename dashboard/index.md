@@ -6,13 +6,12 @@ iotspot offers management information as part of its Smart Workspace Platform by
 
 Authorised users are provided with information about the availability or occupancy rate of your workspaces, i.e. desks and/or rooms. In case you have activated monitoring services, the dashboards will also show you the actual utilisation of desks, rooms and/or the interior climate of designated areas.
 
-This dashboard manual provides you with information and guidelines for your use of the iotspot dashboard services.
+The below sections of this page explain:
+* [Authorising dashboard access](#authorising-dashboard-access)
+* [Activating your user account](#activating-your-user-account)
+* [Revisiting the iotspot dashboard](#revisiting-the-iotspot-dashboard)
+* [Resetting your password](#resetting-your-password)
 
-The below section of this page explain:
-[Authorising dashboard access](#authorising-dashboard-access)
-[Activating your user account](#activating-your-user-account)
-[Revisiting the iotspot dashboard](#revisiting-the-iotspot-dashboard)
-[Resetting your password](#resetting-your-password)
 
 #### Authorising dashboard access
 
