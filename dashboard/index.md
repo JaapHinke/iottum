@@ -12,7 +12,7 @@ This dashboard manual provides you with information and guidelines for your use 
 
 In order to access our dashboards, your organisation needs to specify the email addresses of the employees that are granted access. Optionally, to limit an employee's access to specific locations, you can also specify one or more office locations. If no office location is specified, the employee is granted access to data on all locations where the iotspot service is activated for your organisation.
 
-To authorise users, or request access to the dashboards, please send an e-mail to <html><a href="mailto:support@iotspot.co?subject=dashbaord">support@iotspot.co</a></html> with the subject line: `iotspot dashboard access` and include:
+To authorise users, or request access to the dashboards, please send an e-mail to <a href="mailto:dashboard@iotspot.co?subject=request%20access">support@iotspot.co</a> with the subject line: `iotspot dashboard access` and include:
 * a list of one or more authorised users, with for each user:
   * first and last name
   * email address, and
