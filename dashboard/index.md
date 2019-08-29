@@ -45,21 +45,21 @@ In the email, click the blue `Click to accept invitation` button. This opens a w
 
 Enter and confirm a password, then click `Create account and sign in`.
 
-Finally, click `Continue` to access the iotspot dashboards.
+On the next, click `Continue` to sign in and access the iotspot dashboards.
 
 
 
 #### Revisiting the iotspot dashboard
 
- To revisit the dashboards in QuickSight, go to: [quicksight.aws.amazon.com](https://quicksight.aws.amazon.com){:target="_blank"}.
+ To revisit the dashboards in QuickSight, go to: [quicksight.aws.amazon.com/sn/start?directory_alias=iotspot](https://quicksight.aws.amazon.com/sn/start?directory_alias=iotspot){:target="_blank"}.
 
-If you are using the _same browser_ as before, it will remember your QuickSight account (`iotspot`). Enter you email address and password and click `Sign in`.
+If you use the above link, it will automatically fill in your QuickSight account (`iotspot`) and move to the next page. Enter your email address and password and click `Sign in`.
 
-If you are signing in with a _different browser_, then enter QuickSight account: `iotspot` and click `Continue`. On the next page, enter you email address and password and click `Sign in`.
+If you are asked for your _QuickSight account name_ first, then enter `iotspot` and click `Continue`. On the next page, enter you email address and password and click `Sign in`.
 
 > IMPORTANT  
-> The QuickSight **account name** is always `iotspot`; do not use your email address here.  
-> In QuickSight, your email address is used as the **username**. 
+> The QuickSight _account name_ is always `iotspot`; do not use your email address here.  
+> In QuickSight, your email address is used as the _username_. 
 
 
 #### Resetting your password
