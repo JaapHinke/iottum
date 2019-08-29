@@ -8,8 +8,13 @@ Authorised users are provided with information about the availability or occupan
 
 This dashboard manual provides you with information and guidelines for your use of the iotspot dashboard services.
 
+The below section of this page explain:
+[Authorising dashboard access](#authorising-dashboard-access)
+[Activating your user account](#activating-your-user-account)
+[Revisiting the iotspot dashboard](#revisiting-the-iotspot-dashboard)
+[Resetting your password](#resetting-your-password)
 
-#### User authorisation
+#### Authorising dashboard access
 
 In order to access our dashboards, your organisation needs to specify the email addresses of the employees that are granted access. Optionally, to limit an employee's access to specific locations, you can also specify one or more office locations. If no office location is specified, the employee is granted access to data on all locations where the iotspot service is activated for your organisation.
 
@@ -25,7 +30,7 @@ To authorise users, or request access to the dashboards, please send an e-mail t
 Within 24 hours, each authorised user will be invited to activate his or her QuickSight user account.
 
 
-#### User activation
+#### Activating your user account
 
 Each user will receive an email from **QuickSight Team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
 
@@ -44,7 +49,7 @@ Finally, click `Continue` to access the iotspot dashboards.
 
 
 
-#### Revisiting the iotspot dashboard in QuickSight
+#### Revisiting the iotspot dashboard
 
  To revisit the dashboards in QuickSight, go to: [quicksight.aws.amazon.com](https://quicksight.aws.amazon.com){:target="_blank"}.
 
@@ -64,7 +69,7 @@ This opens the **Password Assistance** page:
 
 ![screenshot of Password Assistance page](QuickSight_Password_Assistance.png){:width="80%"}
 
-On this page, make sure that:  
+On this page:  
 * verify that the QuickSight account name is `iotspot`
 * enter your email address
 * enter the characters in the image
