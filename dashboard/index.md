@@ -23,11 +23,11 @@ To authorise users, or request access to the dashboards, please send an e-mail t
 
 Each user will receive an email from **QuickSight Team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
 
-![screenshot email](QuickSight_invitation.png)
+![screenshot email](QuickSight_invitation.png | width=500)
 
 In the email, click the blue `Click to accept invitation` button. This opens a web page in your browser that starts with `signin.aws.amazon.com`.
 
-![screenshot sign-up page](QuickSight_signup.png)
+![screenshot sign-up page](QuickSight_signup.png | width=400)
 
 > **IMPORTANT**  
 > On this page, do **not** alter the account name (`iotspot`) or the pre-filled email address.
