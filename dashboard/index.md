@@ -80,4 +80,8 @@ You will then see this confirmation page:
 
 ![screenshot of confirmation page](QuickSight_We_emailed_you_instructions.png){:width="80%"}
 
-After you receive the email (check your spam folder if needed), click the reset link to open the **Reset password** page in your browser. Enter and confirm the new password, then click `Continue`. Now continue to sign in with the new password (see **Revisiting the iotspot dashboard in QuickSight** above).
+After you receive the email (check your spam folder if needed), click the reset link to open the **Reset password** page in your browser.
+
+Enter and confirm the new password, then click `Continue`.
+
+Now continue to sign in with the new password (see [Revisiting the iotspot dashboard](#revisiting-the-iotspot-dashboard) above for details).
