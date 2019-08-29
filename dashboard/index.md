@@ -33,7 +33,7 @@ Within 24 hours, each authorised user will be invited to activate his or her Qui
 
 Each user will be invited with an email from **QuickSight team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
 
-![screenshot invitation email](QuickSight_invitation.png)
+![screenshot invitation email](images/QuickSight_invitation.png)
 
 In the email, click the blue `Click to accept invitation` button. This opens a web page in your browser that starts with `signin.aws.amazon.com`.
 
@@ -41,7 +41,7 @@ In the email, click the blue `Click to accept invitation` button. This opens a w
 > On this page, we recommend that you **do not change** the pre-filled Email address.  
 > The pre-filled QuickSight account name (`iotspot`) and Username fields are read-only and cannot be altered.
 
-![screenshot activation page](QuickSight_To_access.png)
+![screenshot activation page](images/QuickSight_To_access.png)
 
 Enter and confirm a password, then click `Create account and sign in`.
 
@@ -68,7 +68,7 @@ In case a user has access to the iotspot account in QuickSight and knows the des
 
 This opens the **Password Assistance** page:
 
-![screenshot of Password Assistance page](QuickSight_Password_Assistance.png)
+![screenshot of Password Assistance page](images/QuickSight_Password_Assistance.png)
 
 On this page:  
 * verify that the QuickSight account name is `iotspot`
@@ -78,7 +78,7 @@ On this page:
 
 You will then see this confirmation page:
 
-![screenshot of confirmation page](QuickSight_We_emailed_you_instructions.png)
+![screenshot of confirmation page](images/QuickSight_We_emailed_you_instructions.png)
 
 After you receive the email (check your spam folder if needed), click the reset link to open the **Reset password** page in your browser.
 
