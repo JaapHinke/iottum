@@ -1,6 +1,6 @@
 ## The iotspot Dashboard
 
-#### Introduction to the iotspot dashboard
+#### Introduction
 
 iotspot offers management information as part of its Smart Workspace Platform by means of dashboards. These dashboards are web-based, require user authorisation, and provide data selection capabilities. They run on the QuickSight platform in Amazon Web Services.
 
