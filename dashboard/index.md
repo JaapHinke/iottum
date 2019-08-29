@@ -24,7 +24,7 @@ To authorise users, or request access to the dashboards, please send an e-mail t
   * (optionally) the iotspot office locations for which the user is authorised to view the dashboards.
 
 > NOTE  
-> Email addresses containing a **+** character are not allowed in QuickSight.
+> Email addresses containing a "+" character are not allowed in QuickSight.
 
 Within 24 hours, each authorised user will be invited to activate his or her QuickSight user account.
 
@@ -33,14 +33,15 @@ Within 24 hours, each authorised user will be invited to activate his or her Qui
 
 Each user will receive an email from **QuickSight Team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
 
-![screenshot email](QuickSight_invitation.png){:width="80%"}
+![screenshot invitation email](QuickSight_invitation.png){:width="80%"}
 
 In the email, click the blue `Click to accept invitation` button. This opens a web page in your browser that starts with `signin.aws.amazon.com`.
 
 > **IMPORTANT**  
-> On this page, **do not alter** the pre-filled QuickSight account name (`iotspot`), Email address, or Username fields.
+> On this page, we recommend that you **do not change** the pre-filled Email address.  
+> The pre-filled QuickSight account name (`iotspot`) and Username fields are read-only and cannot be altered.
 
-![screenshot sign-up page](QuickSight_signup.png){:width="60%"}
+![screenshot activation page](QuickSight_To_access.png){:width="60%"}
 
 Enter a password, then click `Create account and sign in`.
 
@@ -57,7 +58,8 @@ If you are using the _same browser_ as before, it will remember your QuickSight 
 If you are signing in with a _different browser_, then enter QuickSight account: `iotspot` and click `Continue`. On the next page, enter you email address and password and click `Sign in`.
 
 > IMPORTANT  
-> The QuickSight **account name** is always `iotspot`; do not use your email address here. In QuickSight, your email address is used as the **username**. 
+> The QuickSight **account name** is always `iotspot`; do not use your email address here.  
+> In QuickSight, your email address is used as the **username**. 
 
 
 #### Resetting your password
