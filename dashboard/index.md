@@ -57,15 +57,17 @@ If you are signing in with a _different browser_, then enter QuickSight account:
 
 In case a user has access to the iotspot account in QuickSight and knows the designated email address but has forgotten the password, the user can click `Forgot Password?` at the bottom of the **Sign in to QuickSight** page.
 
+This opens the **Password Assistance** page:
+
 ![screenshot of Password Assistance page](QuickSight_Password_Assistance.png){:width="80%"}
 
-In the **Password Assistance** page, make sure that:  
+On this page, make sure that:  
 * verify that the QuickSight account name is `iotspot`
 * enter your email address
 * enter the characters in the image
 * click `Continue`.
 
-You will then see this page:
+You will then see this confirmation page:
 
 ![screenshot of confirmation page](QuickSight_We_emailed_you_instructions.png){:width="80%"}
 
