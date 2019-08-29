@@ -21,7 +21,8 @@ To authorise users, or request access to the dashboards, please send an e-mail t
 
 #### User activation
 
-Each user will receive an _Invitation to Join QuickSight_ email from `QuickSight team` (noreply@quicksight.aws.amazon.com).
+Each user will receive an email from **QuickSight Team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
+![screenshot email](QuickSight invitation.png)
 
 In the email, click `Accept the invitation`. This will open a `signin.aws.amazon.com` web page in your browser.
 
