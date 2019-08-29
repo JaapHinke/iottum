@@ -31,7 +31,7 @@ Within 24 hours, each authorised user will be invited to activate his or her Qui
 
 #### Activating your user account
 
-Each user will receive an email from **QuickSight Team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
+Each user will be invited with an email from **QuickSight team** (noreply@quicksight.aws.amazon.com) with subject **Invitation to Join QuickSight**:
 
 ![screenshot invitation email](QuickSight_invitation.png){:width="80%"}
 
