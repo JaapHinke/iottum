@@ -41,7 +41,7 @@ In the email, click the blue `Click to accept invitation` button. This opens a w
 > On this page, we recommend that you **do not change** the pre-filled Email address.  
 > The pre-filled QuickSight account name (`iotspot`) and Username fields are read-only and cannot be altered.
 
-![screenshot activation page](QuickSight_To_access.png){:width="60%"}
+![screenshot activation page](QuickSight_To_access.png){:width="80%"}
 
 Enter a password, then click `Create account and sign in`.
 
