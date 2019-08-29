@@ -31,7 +31,7 @@ Each user will receive an email from **QuickSight Team** (noreply@quicksight.aws
 In the email, click the blue `Click to accept invitation` button. This opens a web page in your browser that starts with `signin.aws.amazon.com`.
 
 > **IMPORTANT**  
-> On this page, do **not** alter the prefilled QuickSight account name (`iotspot`), Email address, or Username fields.
+> On this page, **do not alter** the pre-filled QuickSight account name (`iotspot`), Email address, or Username fields.
 
 ![screenshot sign-up page](QuickSight_signup.png){:width="60%"}
 
