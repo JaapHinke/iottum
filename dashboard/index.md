@@ -43,7 +43,7 @@ In the email, click the blue `Click to accept invitation` button. This opens a w
 
 ![screenshot activation page](QuickSight_To_access.png){:width="80%"}
 
-Enter a password, then click `Create account and sign in`.
+Enter and confirm a password, then click `Create account and sign in`.
 
 Finally, click `Continue` to access the iotspot dashboards.
 
