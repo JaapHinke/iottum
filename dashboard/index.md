@@ -19,6 +19,9 @@ To authorise users, or request access to the dashboards, please send an e-mail t
   * email address, and
   * (optionally) the iotspot office locations for which the user is authorised to view the dashboards.
 
+> NOTE  
+> Email addresses containing a **+** character are not allowed in QuickSight.
+
 Within 24 hours, each authorised user will be invited to activate his or her QuickSight user account.
 
 
@@ -43,7 +46,7 @@ Finally, click `Continue` to access the iotspot dashboards.
 
 #### Revisiting the iotspot dashboard in QuickSight
 
-To revisit the dashboards in QuickSight, go to: quicksight.aws.amazon.com.
+ To revisit the dashboards in QuickSight, go to: [quicksight.aws.amazon.com](https://quicksight.aws.amazon.com){:target="_blank"}.
 
 If you are using the _same browser_ as before, it will remember your QuickSight account (`iotspot`). Enter you email address and password and click `Sign in`.
 
