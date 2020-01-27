@@ -65,27 +65,40 @@ The `Message` field in the SNS notifcation contains a JSON string with the actua
 #### Fields always included
 
 A data event contain the following fields for all categories:
-* `timestamp_utc`: an _ISO 8601_ string with the timestamp of original event (sensor message or booking event)
-* `source`: a string describing the source of the event, typically a type of sensor or a reservation (booking)
-* `workplace_id`: an integer identifying the workspace (ie, desk or room)
-* `location_id`: an integer identitying the location (ie, office building)
-* `time_zone`: a _tz database_ string describing the time zone that the workspace/location is in
+* `timestamp_utc`\
+an _ISO 8601 string_ with the timestamp of original event (sensor message or booking event)
+* `source`\
+a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
+* `workplace_id`\
+an _integer_ identifying the workspace (ie, desk or room)
+* `location_id`\
+an _integer_ identitying the location (ie, office building)
+* `time_zone`\
+a _tz database string_ describing the time zone that the workspace/location is in
 
 #### Fields included in sensor data events 
 
 For data events originating from a sensor, it also contains:
-* `device_id`: a string identifying the iotspot device that the sensor is connected to
-* `sensor_id`: a string identitying the sensor
+* `device_id`\
+a _string_ identifying the iotspot device that the sensor is connected to
+* `sensor_id`\
+a _string_ identitying the sensor
 
 #### Fields included in _climate_ sensor data events 
 
 For data events originating from a climate sensor, it also contains:
-* `temperature`: a float representing the temperature (in Celsius)
-* `humidity`: a float representing the relative humidity (in percent)
-* `pressure`: a float representing the barometric pressure (in hPa, or mbar)
-* `iaq`: an integer (on a scake from 1-500) representing Interior Air Quality
-* `voc`: a float representing estimated breath volatile organic compounds (in ppm)
-* `co2`: a float representing estimated carbon dioxide (in ppm)
+* `temperature`\
+a _float_ representing the temperature (in Celsius)
+* `humidity`\
+a _float_ representing the relative humidity (in percent)
+* `pressure`\
+a _float_ representing the barometric pressure (in hPa, or mbar)
+* `iaq`\
+an _integer_ (on a scake from 1-500) representing Interior Air Quality
+* `voc`\
+a _float_ representing estimated breath volatile organic compounds (in ppm)
+* `co2`\
+a _float_ representing estimated carbon dioxide (in ppm)
 
 An example of an "unpacked" occupancies data event:
 ```
