@@ -1,5 +1,15 @@
 # push-api
 
+
+## Release status
+
+The iotspot Push API is currently available to select customers on a Proof of Concept basis.
+
+To start using the Push API, contact iotspot and provide one or more endpoints that fulfil the requirements below.
+
+iotspot reserves the right to make changes to the Push API, but will take care to limit the impact on existing Push API subscribers.
+
+
 ## Introduction
 
 The iotspot Push API enables customers to _subscribe_ to a iotspot stream of _data events_.
@@ -32,7 +42,7 @@ As described in that document, an endpoint always needs to _confirm_ a subscript
 The SNS notification's payload contains (among others):
 * a `Message` field that contains a JSON representation of the data events
 * a `MessageAttributes` field that describes the _organization\_id_, _location\_id_ and _category_ of the message's data events
-* a `UnsubscribeURL` to unsubscribe from the stream
+* an `UnsubscribeURL` to unsubscribe from the stream
 * a `Signature` and `SigningCertURL` for message verification (see **Message verification** section below)
 
 A message always contains only a single category of data events.
@@ -63,7 +73,7 @@ An example of an SNS notification message, containing a single climate data even
 
 The `Message` field in the SNS notifcation payload contains a JSON string with the actual data events (as an array).
 
-#### Fields included in all events
+### Fields included in all events
 
 Data events for all categories contain:
 * `timestamp_utc`  
@@ -85,9 +95,9 @@ Data events originating from a sensor furthermore contain:
 * `sensor_id`  
    a _string_ identifying the sensor
 
-##### _climate_ sensor data events 
+#### _climate_ sensor data events 
 
-Data events originating from a climate sensor contain:
+Data events originating from a climate sensor specifically contain:
 * `temperature`  
    a _decimal (with 2 decimal places)_ representing the temperature (in Celsius)
 * `humidity`  
@@ -103,9 +113,9 @@ Data events originating from a climate sensor contain:
 
 These events occur at regular intervals, typically every 10 minutes.
 
-##### _occupancies_ sensor data events 
+#### _occupancies_ sensor data events 
 
-Data events originating from an occupancy sensor contain:
+Data events originating from an occupancy sensor specifically contain:
 * `occupied`  
    a _boolean_ representing whether the workspace is occupied 
 * `reserved`  
@@ -114,11 +124,11 @@ Data events originating from an occupancy sensor contain:
 These events occur whenever an occupancy sensor detects a change from not occupied to occupied, or vice versa.
 
 
-##### _headcount_ sensor data events 
+#### _headcount_ sensor data events 
 
-Data events originating from a headcount sensor contain:
+Data events originating from a headcount sensor specifically contain:
 * `peak`  
-   a integer representing the highest headcount in the period capped by the timestamp 
+   an _integer_ representing the highest headcount in the period capped by the timestamp 
 * `average`  
    a _decimal (with 1 decimal places)_ representing the average headcount in the period capped by the timestamp
 
@@ -126,7 +136,7 @@ These events occur at regular intervals, typically every 10 minutes.
 
 ### Fields included in _occupancies_ booking data events 
 
-Data events (in the occupancies category) originating from a booking (reservation) contain the following occupancy data:
+Data events (in the occupancies category) originating from a booking (reservation) specifically contain:
 * `reserved`  
    a _boolean_ representing whether the workspace is reserved by an end user
 
@@ -163,13 +173,15 @@ The buffer time limit is set as follows:
 * climate: 5 minutes
 * headcount: 5 minutes
 
-For this data, the SNS notification payload typically contains an array of data events.
+In practice this means that the age of a data event in the occupancies category is _on average_ ~30 seconds. For a climate or head, the age is _on average_ ~ 2.5 minutes.
 
-##### Realtime data
+From this logic it follows that, for this type of data, the SNS notification payload typically contains an array of data events.
+
+### Realtime data
 
 For _occupancies_ data events that originate from a reservation (booking) that starts or ends, data events are sent in realtime.
 
-For this data, the SNS notification payload typically contains an array of with a single data event.
+From this logic it follows that, for this type of data, the SNS notification payload normally contains an array with just a single data event.
 
 
 ## Message verification
