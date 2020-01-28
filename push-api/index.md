@@ -65,16 +65,16 @@ The `Message` field in the SNS notifcation contains a JSON string with the actua
 #### Fields always included
 
 A data event contain the following fields for all categories:
-* `timestamp_utc`\
-an _ISO 8601 string_ with the timestamp of original event (sensor message or booking event)
-* `source`\
-a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
-* `workplace_id`\
-an _integer_ identifying the workspace (ie, desk or room)
-* `location_id`\
-an _integer_ identitying the location (ie, office building)
-* `time_zone`\
-a _tz database string_ describing the time zone that the workspace/location is in
+* `timestamp_utc`  
+   an _ISO 8601 string_ with the timestamp of original event (sensor message or booking event)
+* `source`  
+   a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
+* `workplace_id`  
+   an _integer_ identifying the workspace (ie, desk or room)
+* `location_id`  
+   an _integer_ identitying the location (ie, office building)
+* `time_zone`  
+   a _tz database string_ describing the time zone that the workspace/location is in
 
 #### Fields included in sensor data events 
 
