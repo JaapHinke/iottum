@@ -189,3 +189,6 @@ From this logic it follows that, for this type of data, the SNS notification pay
 Subscribing customers are encouraged to verify the signature of notification messages.
 
 The steps to verify the signature are described in: https://docs.aws.amazon.com/sns/latest/dg/sns-verify-signature-of-message.html.
+
+
+##### Copyright &copy; 2020 iotspot BV. All rights reserved. 
