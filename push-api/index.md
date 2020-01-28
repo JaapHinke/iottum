@@ -13,7 +13,7 @@ iotspot uses SNS to push these data events to subscribing _endpoints_, typically
 
 The SNS notification message contains the following data and meta data:
 * an array with one or more data events
-* ids describing the _organization_ and _location_ (to be done)
+* ids describing the _organization_ and _location_
 * the _category_ of the data events
 
 
@@ -31,9 +31,9 @@ As described in that document, an endpoint always needs to _confirm_ a subscript
 
 The SNS notification's payload contains (among others):
 * a `Message` field that contains a JSON representation of the data events
-* a `MessageAttributes` field that describes the _organization\_id_, _location\_id_ (to be done) and _category_ of the message's data events
-* URLs to subscribe or unsubscribe from the stream
-* a `Signature` for message verification (see **Message verification** section below)
+* a `MessageAttributes` field that describes the _organization\_id_, _location\_id_ and _category_ of the message's data events
+* a `UnsubscribeURL` to unsubscribe from the stream
+* a `Signature` and `SigningCertURL` for message verification (see **Message verification** section below)
 
 A message always contains only a single category of data events.
 
@@ -52,6 +52,7 @@ An example of an SNS notification message, containing a single climate data even
     "UnsubscribeURL" : "https://sns.eu-central-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-central-1:951137801000:push-api-data-events-test:e21fe936-6da4-4169-bf12-4252f1478980",
     "MessageAttributes" : {
         "organization_id" : {"Type":"String","Value":"3"},
+        "location_id" : {"Type":"String","Value":"83"},
         "category" : {"Type":"String","Value":"climate"}
     }
 }
@@ -60,47 +61,80 @@ An example of an SNS notification message, containing a single climate data even
 
 ## Message structure and example
 
-The `Message` field in the SNS notifcation contains a JSON string with the actual data events (as an array).
+The `Message` field in the SNS notifcation payload contains a JSON string with the actual data events (as an array).
 
-#### Fields always included
+#### Fields included in all events
 
-A data event contain the following fields for all categories:
+Data events for all categories contain:
 * `timestamp_utc`  
-   an _ISO 8601 string_ with the timestamp of original event (sensor message or booking event)
+   an _ISO 8601 string_ with the timestamp of the original event (sensor message or booking event)
 * `source`  
    a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
 * `workplace_id`  
    an _integer_ identifying the workspace (ie, desk or room)
 * `location_id`  
-   an _integer_ identitying the location (ie, office building)
+   an _integer_ identifying the location (ie, office building)
 * `time_zone`  
    a _tz database string_ describing the time zone that the workspace/location is in
 
-#### Fields included in sensor data events 
+### Fields included in all sensor data events 
 
-For data events originating from a sensor, it also contains:
-* `device_id`\
-a _string_ identifying the iotspot device that the sensor is connected to
-* `sensor_id`\
-a _string_ identitying the sensor
+Data events originating from a sensor furthermore contain:
+* `device_id`  
+   a _string_ identifying the iotspot device that the sensor is connected to
+* `sensor_id`  
+   a _string_ identifying the sensor
 
-#### Fields included in _climate_ sensor data events 
+##### _climate_ sensor data events 
 
-For data events originating from a climate sensor, it also contains:
-* `temperature`\
-a _float_ representing the temperature (in Celsius)
-* `humidity`\
-a _float_ representing the relative humidity (in percent)
-* `pressure`\
-a _float_ representing the barometric pressure (in hPa, or mbar)
-* `iaq`\
-an _integer_ (on a scake from 1-500) representing Interior Air Quality
-* `voc`\
-a _float_ representing estimated breath volatile organic compounds (in ppm)
-* `co2`\
-a _float_ representing estimated carbon dioxide (in ppm)
+Data events originating from a climate sensor contain:
+* `temperature`  
+   a _decimal (with 2 decimal places)_ representing the temperature (in Celsius)
+* `humidity`  
+   a _decimal (with 2 decimal places)_ representing the relative humidity (in percent)
+* `pressure`  
+   a _decimal (with 2 decimal places)_ representing the barometric pressure (in hPa, or mbar)
+* `iaq`  
+   an _integer (on a scale from 1-500)_ representing Interior Air Quality
+* `voc`  
+   a _decimal (with 3 decimal places)_ representing estimated breath volatile organic compounds (in ppm)
+* `co2`  
+   a _decimal (with 3 decimal places)_ representing estimated carbon dioxide (in ppm)
 
-An example of an "unpacked" occupancies data event:
+These events occur at regular intervals, typically every 10 minutes.
+
+##### _occupancies_ sensor data events 
+
+Data events originating from an occupancy sensor contain:
+* `occupied`  
+   a _boolean_ representing whether the workspace is occupied 
+* `reserved`  
+   a _boolean_ representing whether the workspace is reserved by an end user
+
+These events occur whenever an occupancy sensor detects a change from not occupied to occupied, or vice versa.
+
+
+##### _headcount_ sensor data events 
+
+Data events originating from a headcount sensor contain:
+* `peak`  
+   a integer representing the highest headcount in the period capped by the timestamp 
+* `average`  
+   a _decimal (with 1 decimal places)_ representing the average headcount in the period capped by the timestamp
+
+These events occur at regular intervals, typically every 10 minutes.
+
+### Fields included in _occupancies_ booking data events 
+
+Data events (in the occupancies category) originating from a booking (reservation) contain the following occupancy data:
+* `reserved`  
+   a _boolean_ representing whether the workspace is reserved by an end user
+
+These events occur whenever a booking (reservation) starts or ends.
+
+### Example
+
+An example of an occupancies data event as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
 ```
 [
     {    
@@ -117,7 +151,25 @@ An example of an "unpacked" occupancies data event:
 ]
 ```
 
-In this event, the `occupied` field reflects the status as measured by an occupancy sensor (if any). The `reserved` field describes the bookings made by end users.
+
+## Timeliness of data
+
+### Semi-realtime data
+
+For data that does not have to be realtime, data events are buffered inside iotspot until a certain data size or time period limit is reached.
+
+The buffer time limit is set as follows:
+* occupancies: 1 minute (for sensor-originated events)
+* climate: 5 minutes
+* headcount: 5 minutes
+
+For this data, the SNS notification payload typically contains an array of data events.
+
+##### Realtime data
+
+For _occupancies_ data events that originate from a reservation (booking) that starts or ends, data events are sent in realtime.
+
+For this data, the SNS notification payload typically contains an array of with a single data event.
 
 
 ## Message verification
