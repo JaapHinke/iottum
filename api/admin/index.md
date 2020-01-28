@@ -1,4 +1,4 @@
-# [api](..)/admin/
+# api/admin/
 
 ## User administration
 
