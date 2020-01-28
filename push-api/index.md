@@ -32,7 +32,7 @@ The SNS notification message contains the following data and meta data:
 An endpoint subscribing to a iotspot data events stream is typically an HTTPS REST API.  Authentication can be done with Basic or Digest Authentication. There is no option to include an Authorization header, eg, with an API key,
 
 The requirements for such an endpoint are described in:
-https://docs.aws.amazon.com/sns/latest/dg/sns-http-https-endpoint-as-subscriber.html.
+[Using Amazon SNS for System-to-System Messaging with an HTTP/S Endpoint as a Subscriber](https://docs.aws.amazon.com/sns/latest/dg/sns-http-https-endpoint-as-subscriber.html).
 
 As described in that document, an endpoint always needs to _confirm_ a subscription for messages to start flowing.
 
@@ -188,7 +188,7 @@ From this logic it follows that, for this type of data, the SNS notification pay
 
 Subscribing customers are encouraged to verify the signature of notification messages.
 
-The steps to verify the signature are described in: https://docs.aws.amazon.com/sns/latest/dg/sns-verify-signature-of-message.html.
+The steps to verify the signature are described in: [Verifying the Signatures of Amazon SNS Messages](https://docs.aws.amazon.com/sns/latest/dg/sns-verify-signature-of-message.html).
 
 
 ##### Copyright &copy; 2020 iotspot BV. All rights reserved. 
