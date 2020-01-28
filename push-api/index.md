@@ -173,7 +173,7 @@ The buffer time limit is set as follows:
 * climate: 5 minutes
 * headcount: 5 minutes
 
-In practice this means that the age of a data event in the occupancies category is _on average_ ~30 seconds. For a climate or head, the age is _on average_ ~ 2.5 minutes.
+In practice this means that the age of a data event in the occupancies category is _on average_ ~30 seconds. For a climate or headcount data event, the age is _on average_ ~ 2.5 minutes.
 
 From this logic it follows that, for this type of data, the SNS notification payload typically contains an array of data events.
 
