@@ -15,10 +15,9 @@ iotspot reserves the right to make changes to the Push API, but will take care t
 The iotspot Push API enables customers to _subscribe_ to a iotspot stream of _data events_.
 
 Data events are incoming sensor messages or user-driven events (specifically, the start or end of a booking). The following _categories_ of data events are available:
-* occupancies
+* occupancies (originating from occupancy sensors or from booking start/end events)
 * climate
 * headcount
-* reservations (originating from booking start/end events)
 
 iotspot uses SNS to push these data events to subscribing _endpoints_, typically an HTTPS REST API.
 
@@ -135,17 +134,17 @@ Data events originating from a headcount sensor specifically contain:
 
 These events occur at regular intervals, typically every 10 minutes.
 
-### Fields included in _reservations_ data events 
+### Fields included in _occupancies_ booking-originated data events
 
-Data events originating from reservations (bookings) specifically contain:
+Data events originating from bookings specifically contain:
 * `reserved`  
-   a _boolean_ representing whether the workplace is reserved by an end user
+   a _boolean_ representing whether the workplace is reserved (booked) by an end user
 
-These events occur whenever a reservation (booking) starts or ends.
+These events occur whenever a booking starts or ends.
 
 ### Example
 
-An example of an _reservations_ data event as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
+An example of an _occupancies_ booking-originated data event as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
 ```
 [
     {    
