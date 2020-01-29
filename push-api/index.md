@@ -15,9 +15,10 @@ iotspot reserves the right to make changes to the Push API, but will take care t
 The iotspot Push API enables customers to _subscribe_ to a iotspot stream of _data events_.
 
 Data events are incoming sensor messages or user-driven events (specifically, the start or end of a booking). The following _categories_ of data events are available:
-* occupancies (originating from sensors or from booking start/end events)
+* occupancies
 * climate
 * headcount
+* reservations (originating from booking start/end events)
 
 iotspot uses SNS to push these data events to subscribing _endpoints_, typically an HTTPS REST API.
 
@@ -81,11 +82,11 @@ Data events for all categories contain:
 * `source`  
    a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
 * `workplace_id`  
-   an _integer_ identifying the workspace (ie, desk or room)
+   an _integer_ identifying the workplace (ie, desk or room)
 * `location_id`  
    an _integer_ identifying the location (ie, office building)
 * `time_zone`  
-   a _tz database string_ describing the time zone that the workspace/location is in
+   a _tz database string_ describing the time zone that the workplace/location is in
 
 ### Fields included in all sensor data events 
 
@@ -117,9 +118,9 @@ These events occur at regular intervals, typically every 10 minutes.
 
 Data events originating from an occupancy sensor specifically contain:
 * `occupied`  
-   a _boolean_ representing whether the workspace is occupied 
+   a _boolean_ representing whether the workplace is occupied 
 * `reserved`  
-   a _boolean_ representing whether the workspace is reserved by an end user
+   a _boolean_ representing whether the workplace is reserved by an end user
 
 These events occur whenever an occupancy sensor detects a change from not occupied to occupied, or vice versa.
 
@@ -134,17 +135,17 @@ Data events originating from a headcount sensor specifically contain:
 
 These events occur at regular intervals, typically every 10 minutes.
 
-### Fields included in _occupancies_ booking data events 
+### Fields included in _reservations_ data events 
 
-Data events (in the occupancies category) originating from a booking (reservation) specifically contain:
+Data events originating from reservations (bookings) specifically contain:
 * `reserved`  
-   a _boolean_ representing whether the workspace is reserved by an end user
+   a _boolean_ representing whether the workplace is reserved by an end user
 
-These events occur whenever a booking (reservation) starts or ends.
+These events occur whenever a reservation (booking) starts or ends.
 
 ### Example
 
-An example of an occupancies data event as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
+An example of an _reservations_ data event as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
 ```
 [
     {    
@@ -152,7 +153,6 @@ An example of an occupancies data event as found in the `Message` attribute of t
         "device_id": "8931088417068457075",
         "sensor_id": "1000005",
         "source": “reservation",
-        "occupied": false,
         "workplace_id": 5174,
         "location_id": 61,
         "time_zone": "Europe/Amsterdam",
@@ -169,7 +169,7 @@ An example of an occupancies data event as found in the `Message` attribute of t
 For data that does not have to be realtime, data events are buffered inside iotspot until a certain data size or time period limit is reached.
 
 The buffer time limit is set as follows:
-* occupancies: 1 minute (for sensor-originated events)
+* occupancies: 1 minute
 * climate: 5 minutes
 * headcount: 5 minutes
 
@@ -179,7 +179,7 @@ From this logic it follows that, for this type of data, the SNS notification pay
 
 ### Realtime data
 
-For _occupancies_ data events that originate from a reservation (booking) that starts or ends, data events are sent in realtime.
+For _reservations_ data events that originate from a reservation (booking) that starts or ends, data events are sent in realtime.
 
 From this logic it follows that, for this type of data, the SNS notification payload normally contains an array with just a single data event.
 
