@@ -42,11 +42,11 @@ As described in that document, an endpoint always needs to _confirm_ a subscript
 The SNS notification's payload contains (among others):
 * a `Message` field that contains a JSON representation of the data events
 * a `MessageAttributes` field that contains a structure with data that applies to all the data events
-  * `organization_id`
+  * `organization_id`  
     a _string_ identifying the organization
-  * `location_id` (optional)
+  * `location_id` (optional)  
     a _string_ identifying the location (ie, office building)
-  * `category`
+  * `category`  
     a  _string_ identifying the type of data (`climate` | `occupancies` | `headcount`)
 
 * an `UnsubscribeURL` to unsubscribe from the stream
