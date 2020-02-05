@@ -41,7 +41,14 @@ As described in that document, an endpoint always needs to _confirm_ a subscript
 
 The SNS notification's payload contains (among others):
 * a `Message` field that contains a JSON representation of the data events
-* a `MessageAttributes` field that describes the _organization\_id_, _location\_id_ and _category_ of the message's data events
+* a `MessageAttributes` field that contains a structure with data that applies to all the data events
+  * `organization_id`
+    a _string_ identifying the organization
+  * `location_id` (optional)
+    a _string_ identifying the location (ie, office building)
+  * `category`
+    a  _string_ identifying the type of data (`climate` | `occupancies` | `headcount`)
+
 * an `UnsubscribeURL` to unsubscribe from the stream
 * a `Signature` and `SigningCertURL` for message verification (see **Message verification** section below)
 
@@ -82,10 +89,11 @@ Data events for all categories contain:
    a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
 * `workplace_id`  
    an _integer_ identifying the workplace (ie, desk or room)
-* `location_id`  
-   an _integer_ identifying the location (ie, office building)
 * `time_zone`  
    a _tz database string_ describing the time zone that the workplace/location is in
+
+Note: * `location_id`  
+   an _integer_ identifying the location (ie, office building)
 
 ### Fields included in all sensor data events 
 
