@@ -186,7 +186,7 @@ From this logic it follows that, for this type of data, the SNS notification pay
 
 ### Realtime data
 
-For _reservations_ data events that originate from a reservation (booking) that starts or ends, data events are sent in realtime.
+For _occupancies_ data events that originate from a reservation (booking) that starts or ends, data events are sent in realtime.
 
 From this logic it follows that, for this type of data, the SNS notification payload normally contains an array with just a single data event.
 
