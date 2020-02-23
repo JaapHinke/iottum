@@ -41,12 +41,12 @@ As described in that document, an endpoint always needs to _confirm_ a subscript
 
 The SNS notification's payload contains (among others):
 * a `Message` field that contains a JSON representation of the data events
-* a `MessageAttributes` field that contains a structure with data that applies to all the data events
+* a `MessageAttributes` field that contains a structure with key data about the data events
   * `organization_id`  
     a _string_ identifying the organization
-  * `location_id` (optional)  
-    a _string_ identifying the location (ie, office building)
-  * `category`  
+  * `location_id`  
+    a _string_ containing an array of strings identifying the locations (ie, office buildings)
+  * `category`. 
     a  _string_ identifying the type of data (`climate` | `occupancies` | `headcount`)
 
 * an `UnsubscribeURL` to unsubscribe from the stream
@@ -61,7 +61,7 @@ An example of an SNS notification message, containing a single climate data even
     "MessageId" : "920b758a-165f-5905-9bdd-232addf57ae7",
     "TopicArn" : "arn:aws:sns:eu-central-1:951137801000:push-api-data-events-test",
     "Subject" : "iotspot data events",
-    "Message" : "[{\"timestamp_utc\":\"2020-01-21T09:46:50.000Z\",\"device_id\":\"8931088217011846857\",\"sensor_id\":\"4191\",\"source\":\"climate sensor\",\"temperature\":20.04,\"pressure\":1042.91,\"humidity\":38.675,\"gas_voc\":15441,\"iaq\":\"159\",\"iaq_accuracy\":3,\"voc\":\"2.437\",\"co2\":\"1297.760\",\"workplace_id\":4738,\"location_id\":3,\"time_zone\":\"Europe/Amsterdam\"}]",
+    "Message" : "[{\"timestamp_utc\":\"2020-01-21T09:46:50.000Z\",\"device_id\":\"8931088217011846857\",\"sensor_id\":\"4191\",\"source\":\"climate sensor\",\"temperature\":20.04,\"pressure\":1042.91,\"humidity\":38.675,\"gas_voc\":15441,\"iaq\":\"159\",\"iaq_accuracy\":3,\"voc\":\"2.437\",\"co2\":\"1297.760\",\"workplace_id\":4738,\"location_id\":13,\"organization_id\":3,\"time_zone\":\"Europe/Amsterdam\"}]",
     "Timestamp" : "2020-01-21T09:50:34.828Z",
     "SignatureVersion" : "1",
     "Signature" : "EbwwdypRVQYZMRfqCnZnx081aSBb6qY7qTjfu7rgh4LThT+YSMKvb9EnLfJ+V+kWIDviHhtHAzd76QNYiF5OgwgZu6A0qH8MJytDnLlYjie4w4Jw7DqGxPzEP2LjUMVjP0Ya4nliPW/bkbOrWZNURuPMf5myfhboUxDeCgNQEr+10LV6bUbzbt00Y9A12Sga+88j336fyJwJf7aQ1hdreTAi4NBKymaokVUXt+1cBZYPJG1c6UmOo4XnewPGG1ZbxlaXIos8qLWe2r2/0Ct7CWlKBhLyOI6CdKjrjND0hmMszOsAwvCo7RhNnRIbL/zGsCorFNxdpDDTE6KjZcuH6Q==",
@@ -69,7 +69,7 @@ An example of an SNS notification message, containing a single climate data even
     "UnsubscribeURL" : "https://sns.eu-central-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-central-1:951137801000:push-api-data-events-test:e21fe936-6da4-4169-bf12-4252f1478980",
     "MessageAttributes" : {
         "organization_id" : {"Type":"String","Value":"3"},
-        "location_id" : {"Type":"String","Value":"83"},
+        "location_id" : {"Type":"String","Value":"[\"47\"]"},
         "category" : {"Type":"String","Value":"climate"}
     }
 }
@@ -89,11 +89,13 @@ Data events for all categories contain:
    a _string_ describing the source of the event, typically a type of sensor or a reservation (booking)
 * `workplace_id`  
    an _integer_ identifying the workplace (ie, desk or room)
+* `location_id`  
+   an _integer_ identifying the location (ie, office building)
+* `organization_id`  
+   an _integer_ identifying the organization
 * `time_zone`  
    a _tz database string_ describing the time zone that the workplace/location is in
 
-Note: * `location_id`  
-   an _integer_ identifying the location (ie, office building)
 
 ### Fields included in all sensor data events 
 
@@ -113,13 +115,15 @@ Data events originating from a climate sensor specifically contain:
 * `pressure`  
    a _decimal (with 2 decimal places)_ representing the barometric pressure (in hPa, or mbar)
 * `iaq`  
-   an _integer (on a scale from 1-500)_ representing Interior Air Quality
+   an _integer (on a scale from 1-500)_ representing estimated Interior Air Quality
+* `iaq_accuracy`  
+   an _integer (0 | 1 | 2 | 3 | 4)_ representing accuracy of the IAQ, CO2, and VOC estimates
 * `voc`  
    a _decimal (with 3 decimal places)_ representing estimated breath volatile organic compounds (in ppm)
 * `co2`  
    a _decimal (with 3 decimal places)_ representing estimated carbon dioxide (in ppm)
 
-These events occur at regular intervals, typically every 10 minutes.
+These events occur at regular intervals, typically every 5 minutes.
 
 #### _occupancies_ sensor data events 
 
@@ -162,6 +166,7 @@ An example of an _occupancies_ booking-originated data event as found in the `Me
         "source": “reservation",
         "workplace_id": 5174,
         "location_id": 61,
+        "organization_id": 31,
         "time_zone": "Europe/Amsterdam",
         "reserved": false
     }
