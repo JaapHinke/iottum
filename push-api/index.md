@@ -136,7 +136,7 @@ to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoo
 * 3: High accuracy
 
 
-0.{:start="50"} Stabilization / run-in ongoing
+0.{:.start="50"} Stabilization / run-in ongoing
 1. Low accuracy  
 to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoor air) and bad air (eg, box with exhaled breath)
 2. Medium accuracy: auto-trimming ongoing
