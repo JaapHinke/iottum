@@ -1,18 +1,20 @@
-# push-api
+# Data Events Webhook
+
+(formerly: push-api)
 
 
 ## Release status
 
-The iotspot Push API is currently available to select customers on a Proof of Concept basis.
+The iotspot webhook for data events is currently available to select customers on a Proof of Concept basis.
 
-To start using the Push API, contact iotspot and provide one or more endpoints that fulfil the requirements below.
+To start using this webhook, contact iotspot and provide one or more endpoints that fulfil the requirements below.
 
-iotspot reserves the right to make changes to the Push API, but will take care to limit the impact on existing Push API subscribers.
+iotspot reserves the right to make changes to the data events webhook, but will take care to limit the impact on existing subscribers.
 
 
 ## Introduction
 
-The iotspot Push API enables customers to _subscribe_ to a iotspot stream of _data events_.
+The data events webhook enables customers to _subscribe_ to a stream of iotspot _data events_.
 
 Data events are incoming sensor messages or user-driven events (specifically, the start or end of a booking). The following _categories_ of data events are available:
 * occupancies (originating from occupancy sensors or from booking start/end events)
@@ -125,21 +127,15 @@ Data events originating from a climate sensor specifically contain:
 
 These events occur at regular intervals, typically every 5 minutes.
 
-> `iaq_accuracy` values:
-> 
-> * 0: Stabilization / run-in ongoing
-> * 1: Low accuracy  
+##### `iaq_accuracy` values
+
+* 0: Stabilization / run-in ongoing
+* 1: Low accuracy  
 to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoor air) and bad air (eg, box with exhaled breath)
-> * 2: Medium accuracy: auto-trimming ongoing
-> * 3: High accuracy
+* 2: Medium accuracy: auto-trimming ongoing
+* 3: High accuracy
 
 
-{:start=0}
-0. Stabilization / run-in ongoing
-1. Low accuracy  
-to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoor air) and bad air (eg, box with exhaled breath)
-2. Medium accuracy: auto-trimming ongoing
-3. High accuracy
 
 #### _occupancies_ sensor data events 
 
