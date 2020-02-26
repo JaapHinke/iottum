@@ -129,8 +129,7 @@ These events occur at regular intervals, typically every 5 minutes.
 
 ##### `iaq_accuracy` values
 
-0. Stabilization / run-in ongoing
-{:start="0"}
+0. Stabilization / run-in ongoing {:start="0"}
 1. Low accuracy  
 to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoor air) and bad air (eg, box with exhaled breath)
 2. Medium accuracy: auto-trimming ongoing
