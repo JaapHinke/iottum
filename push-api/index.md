@@ -117,13 +117,21 @@ Data events originating from a climate sensor specifically contain:
 * `iaq`  
    an _integer (on a scale from 1-500)_ representing estimated Interior Air Quality
 * `iaq_accuracy`  
-   an _integer (0 | 1 | 2 | 3 | 4)_ representing accuracy of the IAQ, CO2, and VOC estimates
+   an _integer (0 | 1 | 2 | 3)_ representing accuracy of the IAQ, CO<sub>2</sub>, and VOC estimates, see note below  
 * `voc`  
    a _decimal (with 3 decimal places)_ representing estimated breath volatile organic compounds (in ppm)
 * `co2`  
    a _decimal (with 3 decimal places)_ representing estimated carbon dioxide (in ppm)
 
 These events occur at regular intervals, typically every 5 minutes.
+
+> `iaq_accuracy` values:
+> 
+> 0. Stabilization / run-in ongoing
+> 1. Low accuracy  
+to accelarate auto-trimming you can expose sensor once to good air (e.g. outdoor air) and bad air (e.g. box with exhaled breath)
+> 2. Medium accuracy: auto-trimming ongoing
+> 3. High accuracy
 
 #### _occupancies_ sensor data events 
 
