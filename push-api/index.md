@@ -127,11 +127,11 @@ These events occur at regular intervals, typically every 5 minutes.
 
 > `iaq_accuracy` values:
 > 
-> 0: Stabilization / run-in ongoing
-> 1: Low accuracy  
+> * 0: Stabilization / run-in ongoing
+> * 1: Low accuracy  
 to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoor air) and bad air (eg, box with exhaled breath)
-> 2: Medium accuracy: auto-trimming ongoing
-> 3: High accuracy
+> * 2: Medium accuracy: auto-trimming ongoing
+> * 3: High accuracy
 
 #### _occupancies_ sensor data events 
 
