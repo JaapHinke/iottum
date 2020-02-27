@@ -143,7 +143,7 @@ Data events originating from an occupancy sensor specifically contain:
 * `occupied`  
    a _boolean_ representing whether the workplace is occupied 
 * `reserved`  
-   a _boolean_ representing whether the workplace is reserved by an end user
+   a _boolean_ representing whether the workplace is reserved (booked) _at this moment_ by an end user
 
 These events occur whenever an occupancy sensor detects a change from not occupied to occupied, or vice versa.
 
@@ -162,7 +162,7 @@ These events occur at regular intervals, typically every 10 minutes.
 
 Data events originating from bookings specifically contain:
 * `reserved`  
-   a _boolean_ representing whether the workplace is reserved (booked) by an end user
+   a _boolean_ representing whether the workplace is reserved (booked)_at this moment_ by an end user
 
 These events occur whenever a booking starts or ends.
 
