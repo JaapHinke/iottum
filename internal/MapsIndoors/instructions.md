@@ -1,6 +1,17 @@
-> Instructions are for macOS only
+# Script for creating iotspot points in MapsIndoors
 
-# FIRST TIME ONLY
+> These instructions are for macOS only
+
+## INTRODUCTION
+
+The first section describes what files to download (only needed once).
+
+The middle section explains how to run the downloaded script to create iotspoints "points" in MapsIndoors. You will need MapsIndoors credentials for CMS for this.
+
+The final section describes a test playground and test input file.
+
+
+## FIRST TIME ONLY
 
 ### Make working folder
 
@@ -41,7 +52,7 @@ This moves it to your working folder with the right name, and makes it executabl
 
 
 
-# EACH DEPLOYMENT
+## EACH DEPLOYMENT
 
 ### Open Terminal
 
@@ -120,7 +131,7 @@ These files may be relevant, eg, if you at a later point need to delete the gene
 
 
 
-# PLAYGROUND
+## PLAYGROUND
 
 As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
 
