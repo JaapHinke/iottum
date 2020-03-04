@@ -4,7 +4,7 @@
 
 ### Make working folder
 
-Open the Terminal application.
+Open the **Terminal** application.
 
 In the terminal write:
 ```
@@ -19,20 +19,20 @@ In the Finder, you can find it directly under your user folder.
 
 ### Save script
 
-Download the `[generate-iotspot-points.sh](generate-iotspot-points.sh)` script into the working folder.
+Download `[generate-iotspot-points.sh](./generate-iotspot-points.sh)` into the working folder.
 
 
 ### Save location types
 
-Download the attached [iotspot-location-types.json](./iotspot-location-types.json) file in the working folder.
+Download `[iotspot-location-types.json](./iotspot-location-types.json)` into the working folder.
 
 
 ### Download `jq` tool
 
-To use the script, you will need the `jq` tool (a well-known JSON parser) installed.
-Download the lastest binary from: https://stedolan.github.io/jq/download/
+To use the script, you need the `jq` tool (a well-known JSON parser).
+Download the lastest binary from: https://stedolan.github.io/jq/download/ to your `Downloads` folder.
 
-In the Terminal, write:
+Then, in the Terminal, write:
 ```
 mv ~/Downloads/jq-osx-amd64.dms ~/maps/jq
 chmod a+x jq
@@ -115,3 +115,11 @@ If you created iotspot location types, it will generate a file with the IDs of t
 If you created iotspot points, it will generate a file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
 
 These files may be relevant, eg, if you at a later point need to delete the generated points.
+
+
+
+# PLAYGROUND
+
+As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
+
+Instead of the output from the **Map** view in iotmin you can use this `[Map.csv](./Map.csv)` file instead that contains a single room and a single desk, both on the first floor.
