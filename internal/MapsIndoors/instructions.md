@@ -126,4 +126,8 @@ These files may be relevant, eg, if you at a later point need to delete the gene
 
 As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
 
+<<<<<<< HEAD
 As test input you can use this [`Map.csv`](./Map.csv) file, instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
+=======
+As test input you can use this `[Map.csv](./Map.csv)` file, instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
+>>>>>>> 758700be5670cdb38a88589a5c52a6fcfe737745
