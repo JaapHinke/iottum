@@ -19,12 +19,12 @@ In the Finder, you can find it directly under your user folder.
 
 ### Save script
 
-Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder.
+Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder (right-click and click `Download Linked Files As...`).
 
 
 ### Save location types
 
-Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder.
+Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder (right-click and click `Download Linked Files As...`).
 
 
 ### Download jq tool
@@ -124,4 +124,4 @@ These files may be relevant, eg, if you at a later point need to delete the gene
 
 As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
 
-As test input you can use this [`Map.csv`](./Map.csv) file, instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
+As test input, you can download this [`Map.csv`](./Map.csv) into the working folder (right-click and click `Download Linked Files As...`). You can use this instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
