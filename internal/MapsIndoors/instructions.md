@@ -7,8 +7,10 @@
 Open the Terminal application.
 
 In the terminal write:
-`mkdir maps`
-`cd maps`
+```
+mkdir maps
+cd maps
+```
 to create a working folder and use it.
 
 This will be your working folder for working with the MapsIndoors API.
@@ -31,8 +33,10 @@ To use the script, you will need the `jq` tool installed.
 Download the lastest binary from: https://stedolan.github.io/jq/download/
 
 In the Terminal, write:
-`mv ~/Downloads/jq-osx-amd64.dms ~/maps/jq`
-`chmod a+x jq`
+```
+mv ~/Downloads/jq-osx-amd64.dms ~/maps/jq
+chmod a+x jq
+```
 
 This moves it to your working folder with the right name, and makes it executable.
 
