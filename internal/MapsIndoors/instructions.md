@@ -24,12 +24,12 @@ Download the `[generate-iotspot-points.sh](generate-iotspot-points.sh)` script i
 
 ### Save location types
 
-Download the attached `[iotspot-location-type.json](iotspot-location-type.json)` file in the working folder.
+Download the attached [iotspot-location-types.json](./iotspot-location-types.json) file in the working folder.
 
 
-### Download jq tool
+### Download `jq` tool
 
-To use the script, you will need the `jq` tool installed.
+To use the script, you will need the `jq` tool (a well-known JSON parser) installed.
 Download the lastest binary from: https://stedolan.github.io/jq/download/
 
 In the Terminal, write:
@@ -49,7 +49,9 @@ This moves it to your working folder with the right name, and makes it executabl
 Open the Terminal application.
 
 In the terminal write:
-`cd maps`
+```
+cd maps
+```
 to use your working folder for maps.
 
 
@@ -66,31 +68,37 @@ Click **Export** and select **Export to CSV**.
 This will download the file as `Map.csv` to the `Downloads` folder on your computer.
 
 In the Terminal, write:
-`mv ~/Downloads/Map.csv .`
+```
+mv ~/Downloads/Map.csv .
+```
 
-This moves the Maps.csv file to the working folder.
+This moves the `Maps.csv` file to the working folder.
 
 
 ### Run the script
 
 In the Terminal, write:
-`generate-iotspot-points.sh`
+```
+generate-iotspot-points.sh
+```
 
-If needed, you will be prompted to **log in**. Use your CMS credentials. The terminal will remember the login for 24 hours.
+The following will happen:
 
-You will be prompted to **select the solution**.
+* If needed, you will be prompted to **log in**. Use your CMS credentials. The terminal will remember the login for 24 hours.
+
+* You will be prompted to **select the solution**.  
 (If you previously selected a solution, you can just press Enter to continue.)
 
-If needed, you will be prompted to **generate "location types"** for iotspots.
+* If needed, you will be prompted to **generate "location types"** for iotspots.
 
-You will be prompted to **select the building**.
+* You will be prompted to **select the building**.  
 (If you previously selected a building, you can just press Enter to continue.)
 
-Now you will be asked to **verify** if all the floors in the iotmin CSV have a matching ID in the MapsIndoors geodata. If not, first correct the map, or filter out the missing floor(s) when exporting from iotmin.
+* Now you will be asked to **verify** if all the floors in the iotmin CSV have a matching ID in the MapsIndoors geodata. If not, first correct the map, or filter out the missing floor(s) when exporting from iotmin.
 
-If you continue, the script will generate the iotspot points to be created and list them.
+* If you continue, the script will generate the iotspot points to be created and list them.
 
-You will then be asked if you want to **upload** these points to the MapsIndoors API.
+* You will then be asked if you want to **upload** these points to the MapsIndoors API.
 
 The Mapsindoors CMS should now show a **grid with the new points** on each floor, in the center of the floor.
 
