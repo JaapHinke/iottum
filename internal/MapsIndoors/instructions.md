@@ -7,10 +7,9 @@
 Open the **Terminal** application.
 
 In the terminal write:
-```
-mkdir maps
-cd maps
-```
+    mkdir maps
+    cd maps
+
 to create a working folder and use it.
 
 This will be your working folder for working with the MapsIndoors API.
@@ -19,22 +18,22 @@ In the Finder, you can find it directly under your user folder.
 
 ### Save script
 
-Download `[generate-iotspot-points.sh](./generate-iotspot-points.sh)` into the working folder.
+Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder.
 
 
 ### Save location types
 
-Download `[iotspot-location-types.json](./iotspot-location-types.json)` into the working folder.
+Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder.
 
 
-### Download `jq` tool
+### Download jq tool
 
 To use the script, you need the `jq` tool (a well-known JSON parser).
-Download the lastest binary from: https://stedolan.github.io/jq/download/ to your `Downloads` folder.
+Download the latest binary from: [https://stedolan.github.io/jq/download/](https://stedolan.github.io/jq/download/) to your `Downloads` folder.
 
 Then, in the Terminal, write:
 ```
-mv ~/Downloads/jq-osx-amd64.dms ~/maps/jq
+mv ~/Downloads/jq-osx-amd64.dms jq
 chmod a+x jq
 ```
 
@@ -103,16 +102,21 @@ The following will happen:
 The Mapsindoors CMS should now show a **grid with the new points** on each floor, in the center of the floor.
 
 
+### Aborting the script
+
+You can stop the script at any time by pressing Ctrl-C, if necessary multiple times.
+
+
 ### Temporary files
 
-The script will generate a number of TMP files that you can ignore. They will be deleted the next time you run the script.
+The script will generate a number of temporary files in the working folder that you can ignore. They will be deleted the next time you run the script.
 
 
 ### Output files
 
-If you created iotspot location types, it will generate a file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
+If the script created iotspot location types, it will generate a `...-created-location-types.json` file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
 
-If you created iotspot points, it will generate a file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
+If the script created iotspot points, it will generate a `...-created-points.json` file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
 
 These files may be relevant, eg, if you at a later point need to delete the generated points.
 
@@ -122,4 +126,4 @@ These files may be relevant, eg, if you at a later point need to delete the gene
 
 As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
 
-Instead of the output from the **Map** view in iotmin you can use this `[Map.csv](./Map.csv)` file instead that contains a single room and a single desk, both on the first floor.
+As test input you can use this [`Map.csv`](./Map.csv) file, instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
