@@ -1,0 +1,70 @@
+[
+  {
+    "name": "iotspot (desk)",
+    "displayRules": [
+      {
+        "name": "default",
+        "zoomFrom": 17,
+        "zoomTo": 21,
+        "iconUrl": "http://doc.iotspot.co/mapicons/mapsindoors/iotspot_desk.png",
+        "visible": true,
+        "iconVisible": true,
+        "labelVisible": false
+      }
+    ],
+    "propertyTemplates": [
+      {
+        "text": "occupancy sensor",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      },
+      {
+        "text": "climate sensor",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      }
+    ],
+    "properties": {
+      "name@en": "iotspot (desk)",
+      "description@en": "iotspot for single desk"
+    }
+  },
+  {
+    "name": "iotspot (room)",
+    "displayRules": [
+      {
+        "name": "default",
+        "zoomFrom": 17,
+        "zoomTo": 21,
+        "iconUrl": "http://doc.iotspot.co/mapicons/mapsindoors/iotspot_room.png",
+        "visible": true,
+        "iconVisible": true,
+        "labelVisible": false
+      }
+    ],
+    "propertyTemplates": [
+      {
+        "text": "occupancy sensor",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      },
+      {
+        "text": "climate sensor",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      }
+    ],
+    "properties": {
+      "name@en": "iotspot (room)",
+      "description@en": "iotspot for meeting room"
+    }
+  }
+]
