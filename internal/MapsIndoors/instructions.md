@@ -77,7 +77,7 @@ This moves the `Maps.csv` file to the working folder.
 
 In the Terminal, write:
 
-    generate-iotspot-points.sh
+    source generate-iotspot-points.sh
 
 The following will happen:
 
