@@ -7,6 +7,7 @@
 Open the **Terminal** application.
 
 In the terminal write:
+
     mkdir maps
     cd maps
 
@@ -32,10 +33,9 @@ To use the script, you need the `jq` tool (a well-known JSON parser).
 Download the latest binary from: [https://stedolan.github.io/jq/download/](https://stedolan.github.io/jq/download/) to your `Downloads` folder.
 
 Then, in the Terminal, write:
-```
-mv ~/Downloads/jq-osx-amd64.dms jq
-chmod a+x jq
-```
+
+    mv ~/Downloads/jq-osx-amd64.dms jq
+    chmod a+x jq
 
 This moves it to your working folder with the right name, and makes it executable.
 
@@ -48,9 +48,9 @@ This moves it to your working folder with the right name, and makes it executabl
 Open the Terminal application.
 
 In the terminal write:
-```
-cd maps
-```
+
+    cd maps
+
 to use your working folder for maps.
 
 
@@ -67,9 +67,8 @@ Click **Export** and select **Export to CSV**.
 This will download the file as `Map.csv` to the `Downloads` folder on your computer.
 
 In the Terminal, write:
-```
-mv ~/Downloads/Map.csv .
-```
+
+    mv ~/Downloads/Map.csv .
 
 This moves the `Maps.csv` file to the working folder.
 
@@ -77,9 +76,8 @@ This moves the `Maps.csv` file to the working folder.
 ### Run the script
 
 In the Terminal, write:
-```
-generate-iotspot-points.sh
-```
+
+    generate-iotspot-points.sh
 
 The following will happen:
 
@@ -126,8 +124,4 @@ These files may be relevant, eg, if you at a later point need to delete the gene
 
 As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
 
-<<<<<<< HEAD
 As test input you can use this [`Map.csv`](./Map.csv) file, instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
-=======
-As test input you can use this `[Map.csv](./Map.csv)` file, instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
->>>>>>> 758700be5670cdb38a88589a5c52a6fcfe737745
