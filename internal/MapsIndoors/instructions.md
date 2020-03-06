@@ -28,19 +28,9 @@ This will be your working folder for working with the MapsIndoors API.
 In the Finder, you can find it directly under your user folder.
 
 
-### Save script
-
-Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder (right-click and select `Download Linked File As...`).
-
-
-### Save location types
-
-Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder (right-click and select `Download Linked File As...`).
-
-
 ### Download jq tool
 
-To use the script, you need the `jq` tool (a well-known JSON parser).
+The script relies on the `jq` tool, a well-known JSON parser, to parse and generate geodata.
 Download the latest 64-bit binary for OS X (macOS) from: [https://stedolan.github.io/jq/download/](https://stedolan.github.io/jq/download/) into the working folder (right-click and select `Download Linked File As...`).
 
 Then, in the Terminal, write:
@@ -49,6 +39,16 @@ Then, in the Terminal, write:
     chmod a+x jq
 
 This gives it the right name and makes it executable.
+
+
+### Save script
+
+Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder (right-click and select `Download Linked File As...`).
+
+
+### Save location types
+
+Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder (right-click and select `Download Linked File As...`).
 
 
 
@@ -96,7 +96,7 @@ If not, first correct the map, or filter out the missing floor(s) when exporting
 The Mapsindoors CMS should now show a **grid with the new points** on each floor, in the center of the floor.
 
 
-### Aborting the script
+### Stopping the script
 
 You can stop the script at any time by pressing Ctrl-C, if necessary multiple times.
 
