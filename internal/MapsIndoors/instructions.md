@@ -30,83 +30,68 @@ In the Finder, you can find it directly under your user folder.
 
 ### Save script
 
-Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder (right-click and click `Download Linked File As...`).
+Download [`generate-iotspot-points.sh`](./generate-iotspot-points.sh) into the working folder (right-click and select `Download Linked File As...`).
 
 
 ### Save location types
 
-Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder (right-click and click `Download Linked File As...`).
+Download [`iotspot-location-types.json`](./iotspot-location-types.json) into the working folder (right-click and select `Download Linked File As...`).
 
 
 ### Download jq tool
 
 To use the script, you need the `jq` tool (a well-known JSON parser).
-Download the latest binary from: [https://stedolan.github.io/jq/download/](https://stedolan.github.io/jq/download/) to your `Downloads` folder.
+Download the latest 64-bit binary for OS X (macOS) from: [https://stedolan.github.io/jq/download/](https://stedolan.github.io/jq/download/) into the working folder (right-click and select `Download Linked File As...`).
 
 Then, in the Terminal, write:
 
-    mv ~/Downloads/jq-osx-amd64.dms jq
+    mv jq-osx-amd64.dms jq
     chmod a+x jq
 
-This moves it to your working folder with the right name, and makes it executable.
+This gives it the right name and makes it executable.
 
 
 
 ## EACH DEPLOYMENT
 
-### Open Terminal
-
-Open the Terminal application.
-
-In the terminal write:
-
-    cd maps
-
-to use your working folder for maps.
-
-
 ### Get list with iotspots
 
-In iotmin, go to the **Map** view.
+In iotmin, go to the [**Map**](https://app.iotspot.co/iotmin/workplace_zone.php?order%5B0%5D=asort_field) view.
 
-Select the location about to be installed (eg, by doing a search).
+Select the workplaces with iotspots that you want to add to the map (eg, by doing a search on location and floor).
 
-Click **Sort Field** to get the right sorting (A-Z). This is the order in which the iotspots will positioned in the initial grid on the map.
+If you used the link above the list is already sorted. If not, then click **Sort Field** to get the right sorting (A-Z), in the same order as the iotspots are presented in the app. This order will be used for the grid with new iotspots on the map.
 
 Click **Export** and select **Export to CSV**.
 
-This will download the file as `Map.csv` to the `Downloads` folder on your computer.
-
-In the Terminal, write:
-
-    mv ~/Downloads/Map.csv .
-
-This moves the `Maps.csv` file to the working folder.
+This will download the file as `Map.csv` to the `Downloads` folder on your computer. Move it to your `maps` working folder.
 
 
 ### Run the script
 
-In the Terminal, write:
+Open the Terminal application, and write:
 
+    cd maps
     source generate-iotspot-points.sh
 
-The following will happen:
+to go to your working folder and run the script.
 
-* If needed, you will be prompted to **log in**. Use your CMS credentials. The terminal will remember the login for 24 hours.
+The script will then ask you to:
 
-* You will be prompted to **select the solution**.  
-(If you previously selected a solution, you can just press Enter to continue.)
+* if needed, **log in**. Use your CMS credentials. The terminal will remember the login for 24 hours.
 
-* If needed, you will be prompted to **generate "location types"** for iotspots.
+* **select the solution** where you want to create the iotspot points.  
+(If you want to use a previously selected solution again, you can just press Enter to continue.)
 
-* You will be prompted to **select the building**.  
-(If you previously selected a building, you can just press Enter to continue.)
+* if needed, **generate "location types"** for iotspots.
 
-* Now you will be asked to **verify** if all the floors in the iotmin CSV have a matching ID in the MapsIndoors geodata. If not, first correct the map, or filter out the missing floor(s) when exporting from iotmin.
+* **select the building** where you want to create the iotspot points.  
+(If you want to use a previously selected building again, you can just press Enter to continue.)
 
-* If you continue, the script will generate the iotspot points to be created and list them.
+* **verify** if all the floors found in the exported `Map.csv` file have a matching ID in the MapsIndoors geodata.  
+If not, first correct the map, or filter out the missing floor(s) when exporting from iotmin.
 
-* You will then be asked if you want to **upload** these points to the MapsIndoors API.
+* the script will then let you preview the iotspot points that will be created and ask you to confirm **uploading** them to the MapsIndoors API.
 
 The Mapsindoors CMS should now show a **grid with the new points** on each floor, in the center of the floor.
 
@@ -123,9 +108,9 @@ The script will generate a number of temporary files in the working folder that 
 
 ### Output files
 
-If the script created iotspot location types, it will generate a `...-created-location-types.json` file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
+If the script created iotspot location types, it will generate a `<solution name>-<date/time>-created-location-types.json` file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
 
-If the script created iotspot points, it will generate a `...-created-points.json` file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
+If the script created iotspot points, it will generate a `<solution name>-<date/time>-created-points.json` file with the IDs of the location types. This file is prefixed with the solution name and a timestamp.
 
 These files may be relevant, eg, if you at a later point need to delete the generated points.
 
@@ -135,4 +120,4 @@ These files may be relevant, eg, if you at a later point need to delete the gene
 
 As a playground, you can use the `IOTSpot Playground` that MapsIndoors created.
 
-As test input, you can download this [`Map.csv`](./Map.csv) into the working folder (right-click and click `Download Linked File As...`). You can use this instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
+As test input, you can download this [`Map.csv`](./Map.csv) into the working folder (right-click and select `Download Linked File As...`). You can use this instead of the output from the **Map** view in iotmin. It contains two iotspots: one for a room and one for a desk, both on the first floor.
