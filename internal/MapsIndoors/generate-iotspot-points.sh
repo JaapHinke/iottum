@@ -116,8 +116,9 @@ PATH=$(pwd):$PATH
 
 # TO DO: Full "title capitalization" of name.
 
+# 3=Floor, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 14=Name, 12=Workplace Type 
+# capitalize name as follows: " ( toupper( substr( $14, 1, 1 ) ) substr( $14, 2 ) ) "
 awk -F"\",\"" 'NR>1 {i = ($3 != prev_floor  ? 0 : i + 1); print (i ? i : 0) "," $3 "," $10 "," $11 "," ( toupper( substr( $14, 1, 1 ) ) substr( $14, 2 ) ) "," $12; prev_floor = $3 }' $IOTSPOT_WORKPLACES_FILE > $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE 
-
 
 
 ##### Authorization #####
@@ -313,7 +314,7 @@ else
         cat $CREATED_LOCATION_TYPES_FILE | jq . > "$SOLUTION_NAME-$DATE-$CREATED_LOCATION_TYPES_FILE"
         rm -f $CREATED_LOCATION_TYPES_FILE
 
-        echo "Saved in file: $SOLUTION_NAME-$DATE-$CREATED_POINTS_FILE_SUFFIX"
+        echo "Saved in file: $SOLUTION_NAME-$DATE-$CREATED_LOCATION_TYPES_FILE"
     else
         echo ... Canceled.
         return
@@ -419,6 +420,8 @@ fi
 # Finally, most of the local variables are used to generate a 'point' element in the JSON output, resulting in a final JSON structure that can be used in the MapsIndoors API.
 # Note: The _iotspot_start_grid value for each entry is for iotspot debugging only and will be ignored by the API.
 
+# 1=Floor, 2=Zone, 3=Workplace Id, 4=Workplace Code, 5=Category, 6=Name, 7=Workplace Type 
+
 jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
     [inputs
     | . / "\n"
@@ -430,12 +433,14 @@ jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
       | $floor_data[$_floor_level].id as $parentId
       | (($floor_data[$_floor_level].boundingbox[0] + $floor_data[$_floor_level].boundingbox[2])/2) as $longitude
       | (($floor_data[$_floor_level].boundingbox[1] + $floor_data[$_floor_level].boundingbox[3])/2) as $latitude
-      | $fields[2] as $workplace_code
-      | $fields[3] as $_category
-      | $fields[4] as $iotspot_name
+      | $fields[2] as $zone
+      | $fields[3] as $workplace_id
+      | $fields[4] as $workplace_code
+      | $fields[5] as $_category
+      | $fields[6] as $iotspot_name
       | (if ($_category == "R") then $iotspot_name + " (Meeting Room)" else $iotspot_name end) as $name
       | (if ($_category == "R") then '$DISPLAY_TYPE_ID_ROOM' else '$DISPLAY_TYPE_ID_DESK' end) as $displayTypeId
-      | $fields[5] as $description
+      | $fields[7] as $description
       | {
             "parentId": $parentId,
             "datasetId": "'$DATASET_ID'",
@@ -455,7 +460,13 @@ jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
                 "name@'$LANG_3'": $name,
                 "description@'$LANG_1'": ($description | sub("&amp;";"&")),
                 "description@'$LANG_2'": ($description | sub("&amp;";"&")),
-                "description@'$LANG_3'": ($description | sub("&amp;";"&"))
+                "description@'$LANG_3'": ($description | sub("&amp;";"&")),
+                "workplace id@'$LANG_1'": $workplace_id,
+                "workplace id@'$LANG_2'": $workplace_id,
+                "workplace id@'$LANG_3'": $workplace_id,
+                "zone@'$LANG_1'": ($zone | sub("&amp;";"&")),
+                "zone@'$LANG_2'": ($zone | sub("&amp;";"&")),
+                "zone@'$LANG_3'": ($zone | sub("&amp;";"&"))
             },
             "_iotspot_start_grid": {
                 "row": $grid_row,
@@ -501,10 +512,10 @@ cat $CREATED_POINTS_FILE_SUFFIX | jq '.'
 DATE=$(date '+%Y%m%d-%H%M%S')
 # "Renaming" by creating a new file (using jq to format nicely) and then removing the old file.
 CREATED_POINTS_FILE="$SOLUTION_NAME-$DATE-$CREATED_POINTS_FILE_SUFFIX"
-cat $CREATED_POINTS_FILE_SUFFIX | jq . > $CREATED_POINTS_FILE
-rm -f $CREATED_POINTS_FILE_SUFFIX
+cat $MAPSINDOORS_NEW_POINTS_TMP_FILE | jq . > "$CREATED_POINTS_FILE"
+rm -f $MAPSINDOORS_NEW_POINTS_TMP_FILE
 
-echo "Saved in file: $SOLUTION_NAME-$DATE-$CREATED_POINTS_FILE_SUFFIX"
+echo "Saved in file: $CREATED_POINTS_FILE"
 
 
 
