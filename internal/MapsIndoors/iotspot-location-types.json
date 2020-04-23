@@ -14,6 +14,20 @@
     ],
     "propertyTemplates": [
       {
+        "text": "zone",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      },
+      {
+        "text": "workplace id",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      },
+      {
         "text": "occupancy sensor",
         "type": "string",
         "defaultValue": [
@@ -47,6 +61,20 @@
       }
     ],
     "propertyTemplates": [
+      {
+        "text": "zone",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      },
+      {
+        "text": "workplace id",
+        "type": "string",
+        "defaultValue": [
+          "no"
+        ]
+      },
       {
         "text": "occupancy sensor",
         "type": "string",
