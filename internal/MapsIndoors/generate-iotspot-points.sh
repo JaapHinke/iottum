@@ -118,7 +118,7 @@ PATH=$(pwd):$PATH
 
 # 3=Floor, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 14=Name, 12=Workplace Type 
 # capitalize name as follows: " ( toupper( substr( $14, 1, 1 ) ) substr( $14, 2 ) ) "
-awk -F"\",\"" 'NR>1 {i = ($3 != prev_floor  ? 0 : i + 1); print (i ? i : 0) "," $3 "," $10 "," $11 "," ( toupper( substr( $14, 1, 1 ) ) substr( $14, 2 ) ) "," $12; prev_floor = $3 }' $IOTSPOT_WORKPLACES_FILE > $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE 
+awk -F"\",\"" 'NR>1 {i = ($3 != prev_floor  ? 0 : i + 1); print (i ? i : 0) "," $3 "," $5 "," $6 "," $7 "," $8 "," $9 "," $10 "," $11 ","$14 "," $12; prev_floor = $3 }' $IOTSPOT_WORKPLACES_FILE > $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE 
 
 
 ##### Authorization #####
@@ -420,7 +420,7 @@ fi
 # Finally, most of the local variables are used to generate a 'point' element in the JSON output, resulting in a final JSON structure that can be used in the MapsIndoors API.
 # Note: The _iotspot_start_grid value for each entry is for iotspot debugging only and will be ignored by the API.
 
-# 1=Floor, 2=Zone, 3=Workplace Id, 4=Workplace Code, 5=Category, 6=Name, 7=Workplace Type 
+# 3=Floor, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 14=Name, 12=Workplace Type 
 
 jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
     [inputs
@@ -433,14 +433,14 @@ jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
       | $floor_data[$_floor_level].id as $parentId
       | (($floor_data[$_floor_level].boundingbox[0] + $floor_data[$_floor_level].boundingbox[2])/2) as $longitude
       | (($floor_data[$_floor_level].boundingbox[1] + $floor_data[$_floor_level].boundingbox[3])/2) as $latitude
-      | $fields[2] as $zone
-      | $fields[3] as $workplace_id
-      | $fields[4] as $workplace_code
-      | $fields[5] as $_category
-      | $fields[6] as $iotspot_name
+      | $fields[3] as $zone
+      | $fields[6] as $workplace_id
+      | $fields[7] as $workplace_code
+      | $fields[8] as $_category
+      | $fields[9] as $iotspot_name
       | (if ($_category == "R") then $iotspot_name + " (Meeting Room)" else $iotspot_name end) as $name
       | (if ($_category == "R") then '$DISPLAY_TYPE_ID_ROOM' else '$DISPLAY_TYPE_ID_DESK' end) as $displayTypeId
-      | $fields[7] as $description
+      | $fields[10] as $description
       | {
             "parentId": $parentId,
             "datasetId": "'$DATASET_ID'",
