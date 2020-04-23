@@ -22,7 +22,7 @@ GRID_WIDTH=10
 # http://www.movable-type.co.uk/scripts/latlong.html
 
 # For "top to bottom" rows in the grid: use negative distance for northern hemisphere, positive for southern hemisphere.
-GRID_VERTICAL_SPACING=-0.00001 # degrees latitude (from north to south)
+GRID_VERTICAL_SPACING=-0.000015 # degrees latitude (from north to south)
 # For "left to right" columns in the grid: use positive distance.
 GRID_HORIZONTAL_SPACING=0.000015 # degrees longitude (from west to east)
 
@@ -107,18 +107,38 @@ PATH=$(pwd):$PATH
 # -F is field separator
 # NR>1 condition skips first line with headers in CSV
 # print creates a comma separated file with the required fields from the iotmin export CSV:
-# - $3 is the floor
-# Note: awk remembers the floor in 'prev_floor' and then the index 'i'' is reset to 0 whenever the floor changes
-# - $10 is the Workplace Code (device identifier)
-# - $11 is the Category (S or R)
-# - $14 is the name (iotspot image name), with first letter capitalized
-# - $12 is used as the description
 
-# TO DO: Full "title capitalization" of name.
 
-# 3=Floor, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 14=Name, 12=Workplace Type 
-# capitalize name as follows: " ( toupper( substr( $14, 1, 1 ) ) substr( $14, 2 ) ) "
-awk -F"\",\"" 'NR>1 {i = ($3 != prev_floor  ? 0 : i + 1); print (i ? i : 0) "," $3 "," $5 "," $6 "," $7 "," $8 "," $9 "," $10 "," $11 ","$14 "," $12; prev_floor = $3 }' $IOTSPOT_WORKPLACES_FILE > $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE 
+# Columns 1 and 2 in the CSV file are dropped, and replaced by the calculated row and column.
+# Columns 3-14 are copied as is (even though not all columns are used later). The remaining columns are not used.
+# 3=Floor, 4 not used, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 13 not used 12=Workplace Type, 14=Name, remainder not used 
+# The "dummy" column's only purpose is to align column numbering between awk processing (here) and jq processing (further below). See comments further below.
+# Workplace Code is used as "external id" in Maps (and is also device identifier)
+# Category is 'S' (desk) or 'R' (room)
+# Name is the iotspot image name
+# Workplace Type is used as the description
+
+# TO DO: Full "title capitalization" of name. First later capitalization is done as follows:
+# ( toupper( substr( $14, 1, 1 ) ) substr( $14, 2 ) )
+
+# Grid building logic:
+# Restart row at 0 for each floor.
+# Restart column at 0 for each zone.
+# Within the same row (=zone), add use 1.4 spacing instead of 1.
+
+# TO DO: Check this work correctly for multiple floors.
+
+awk -F"\",\"" 'NR>1 {
+    row = ($3 != prev_floor) ? 0 : row;
+    row = ($5 != prev_zone_id) ? row + 1 : row;
+    column = ($5 != prev_zone_id) ? 0 : column;
+    column = (($5 == prev_zone_id) && ($7 != prev_cluster_id)) ? column + 1.4 : column + 1;
+    print "dummy," row "," column "," $3 "," $4 "," $5 "," $6 "," $7 "," $8 "," $9 "," $10 "," $11 "," $12 "," $13 "," $14;
+    prev_floor = $3;
+    prev_zone_id = $5;
+    prev_cluster_id = $7
+}' $IOTSPOT_WORKPLACES_FILE > $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE
+
 
 
 ##### Authorization #####
@@ -417,30 +437,42 @@ fi
 # For some local variables (eg, determining the initial grid position) some calculations are done as part of this.
 # Some of the local variables are only used for intermediate calculations, these start with an "_" like: $_floor_level.
 
+# The rows and columns for the grid are calculated with awk, further above.
+# The position of the grid (to the right of the map "bounding box") and vertically in the middle is done below in jq.
+# TO DO: Make sure the bounding box interpretation is correct for western and southern hemispheres.
+
 # Finally, most of the local variables are used to generate a 'point' element in the JSON output, resulting in a final JSON structure that can be used in the MapsIndoors API.
 # Note: The _iotspot_start_grid value for each entry is for iotspot debugging only and will be ignored by the API.
 
-# 3=Floor, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 14=Name, 12=Workplace Type 
+# A few hacks were done to align the column numbering in the awk processing (above) and the jq processing (below).
+# (Note: In awk, the first column is 1 and in jq, the first column is 0.)
+# Field 0 is a dummy field.
+# Fields 1 and 2 are calculated (with awk, above) grid coordinates (row/column). They replace two fields in the original CSV that are not used anyway.
+# Other fields:
+# 3=Floor, 4 not used, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 13 not used 12=Workplace Type, 14=Name, remainder not used 
 
 jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
     [inputs
     | . / "\n"
       | (.[]  | select(length > 0) | . / ",") as $fields
-      | ($fields[0] | tonumber) as $_index
-      | ($_index % '$GRID_WIDTH') as $grid_column
-      | ($_index / '$GRID_WIDTH' | floor) as $grid_row
-      | $fields[1] as $_floor_level
+      | ($fields[1] | tonumber) as $grid_row
+      | ($fields[2] | tonumber) as $grid_column
+      | $fields[3] as $_floor_level
       | $floor_data[$_floor_level].id as $parentId
-      | (($floor_data[$_floor_level].boundingbox[0] + $floor_data[$_floor_level].boundingbox[2])/2) as $longitude
-      | (($floor_data[$_floor_level].boundingbox[1] + $floor_data[$_floor_level].boundingbox[3])/2) as $latitude
-      | $fields[3] as $zone
-      | $fields[6] as $workplace_id
-      | $fields[7] as $workplace_code
-      | $fields[8] as $_category
-      | $fields[9] as $iotspot_name
+      | $floor_data[$_floor_level].boundingbox[0] as $_min_longitude
+      | $floor_data[$_floor_level].boundingbox[1] as $_min_latitude
+      | $floor_data[$_floor_level].boundingbox[2] as $_max_longitude
+      | $floor_data[$_floor_level].boundingbox[3] as $_max_latitude
+      | $_max_longitude as $longitude
+      | (($_min_latitude + $_max_latitude)/2) as $latitude
+      | $fields[6] as $zone
+      | $fields[9] as $workplace_id
+      | $fields[10] as $workplace_code
+      | $fields[11] as $_category
+      | $fields[14] as $iotspot_name
       | (if ($_category == "R") then $iotspot_name + " (Meeting Room)" else $iotspot_name end) as $name
       | (if ($_category == "R") then '$DISPLAY_TYPE_ID_ROOM' else '$DISPLAY_TYPE_ID_DESK' end) as $displayTypeId
-      | $fields[10] as $description
+      | $fields[12] as $description
       | {
             "parentId": $parentId,
             "datasetId": "'$DATASET_ID'",
