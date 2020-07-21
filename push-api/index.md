@@ -48,8 +48,8 @@ The SNS notification's payload contains (among others):
     a _string_ identifying the organization
   * `location_id`  
     a _string_ containing an array of strings identifying the locations (ie, office buildings)
-  * `category`. 
-    a  _string_ identifying the type of data (`climate` | `occupancies` | `headcount`)
+  * `category`  
+    a _string_ identifying the type of data (`climate` | `occupancies` | `headcount`)
 
 * an `UnsubscribeURL` to unsubscribe from the stream
 * a `Signature` and `SigningCertURL` for message verification (see **Message verification** section below)
@@ -82,9 +82,9 @@ An example of an SNS notification message, containing a single climate data even
 
 The `Message` field in the SNS notifcation payload contains a JSON string with the actual data events (as an array).
 
-### Fields included in all events
+#### generic fields
 
-Data events for all categories contain:
+Data events for all categories contain these generic fields:
 * `timestamp_utc`  
    an _ISO 8601 string_ with the timestamp of the original event (sensor message or booking event)
 * `source`  
@@ -98,10 +98,7 @@ Data events for all categories contain:
 * `time_zone`  
    a _tz database string_ describing the time zone that the workplace/location is in
 
-
-### Fields included in all sensor data events 
-
-Data events originating from a sensor furthermore contain:
+Data events *that originate from a sensor* furthermore contain these generic fields:
 * `device_id`  
    a _string_ identifying the iotspot device that the sensor is connected to
 * `sensor_id`  
@@ -109,7 +106,7 @@ Data events originating from a sensor furthermore contain:
 
 #### _climate_ sensor data events 
 
-Data events originating from a climate sensor specifically contain:
+Data events *that originate from a climate sensor* contain these specific fields:
 * `temperature`  
    a _decimal (with 2 decimal places)_ representing the temperature (in Celsius)
 * `humidity`  
@@ -139,7 +136,7 @@ to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoo
 
 #### _occupancies_ sensor data events 
 
-Data events originating from an occupancy sensor specifically contain:
+Data events *that originate from an occupancy sensor* contain these specific fields:
 * `occupied`  
    a _boolean_ representing whether the workplace is occupied 
 * `reserved`  
@@ -150,7 +147,7 @@ These events occur whenever an occupancy sensor detects a change from not occupi
 
 #### _headcount_ sensor data events 
 
-Data events originating from a headcount sensor specifically contain:
+Data events *that originate from a headcount sensor* contain these specific fields:
 * `peak`  
    an _integer_ representing the highest headcount in the period capped by the timestamp 
 * `average`  
@@ -158,17 +155,38 @@ Data events originating from a headcount sensor specifically contain:
 
 These events occur at regular intervals, typically every 10 minutes.
 
-### Fields included in _occupancies_ booking-originated data events
+##### example
 
-Data events originating from bookings specifically contain:
+An example of the data as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
+```
+[
+    {    
+        "timestamp_utc": "2020-01-16T13:42:42.000Z”,
+        "device_id": "8931088417068457075",
+        "sensor_id": "1000005",
+        "source": “reservation",
+        "workplace_id": 5174,
+        "location_id": 61,
+        "organization_id": 31,
+        "time_zone": "Europe/Amsterdam",
+        "peak": 3,
+        "average": 2.3
+    }
+]
+```
+
+
+#### _occupancies_ booking-based data events
+
+Data events *that originate from a booking* contain this specific field:
 * `reserved`  
    a _boolean_ representing whether the workplace is reserved (booked)_at this moment_ by an end user
 
 These events occur whenever a booking starts or ends.
 
-### Example
+##### example
 
-An example of an _occupancies_ booking-originated data event as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
+An example of the data as found in the `Message` attribute of the notification payload ("unpacked" from the JSON encapsulation):
 ```
 [
     {    
