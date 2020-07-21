@@ -104,7 +104,7 @@ Data events *that originate from a sensor* furthermore contain these generic fie
 * `sensor_id`  
    a _string_ identifying the sensor
 
-### _climate_ sensor data events 
+### climate fields 
 
 Data events *that originate from a climate sensor* contain these specific fields:
 * `temperature`  
@@ -124,7 +124,7 @@ Data events *that originate from a climate sensor* contain these specific fields
 
 These events occur at regular intervals, typically every 5 minutes.
 
-#### `iaq_accuracy` values
+##### values for `iaq_accuracy` field
 
 {:start="0"}
 0. Stabilization / run-in ongoing  
@@ -133,8 +133,32 @@ to accelarate auto-trimming you can expose a sensor once to good air (eg, outdoo
 2. Medium accuracy: auto-trimming ongoing
 3. High accuracy
 
+##### example
 
-### _occupancies_ sensor data events 
+An example of the dataas found in the `Message` attribute of the notification payload:
+```
+[
+    {    
+        "timestamp_utc": "2020-01-16T13:42:42.000Z”,
+        "device_id": "8931088417068457075",
+        "sensor_id": "1000005",
+        "source": "climate sensor",
+        "workplace_id": 5174,
+        "location_id": 61,
+        "organization_id": 31,
+        "time_zone": "Europe/Amsterdam",
+        "temperature": 20.12,
+        "humidity": 43.21,
+        "pressure": 1014.78,
+        "iaq": 124,
+        "iaq_accuracy": 3,
+        "voc": 23.225,
+        "co2": 655.322
+    }
+]
+```
+
+### occupancies fields 
 
 Data events *that originate from an occupancy sensor* contain these specific fields:
 * `occupied`  
@@ -144,9 +168,16 @@ Data events *that originate from an occupancy sensor* contain these specific fie
 
 These events occur whenever an occupancy sensor detects a change from not occupied to occupied, or vice versa.
 
-#### example
+Data events *that originate from a booking* contain this specific field:
+* `reserved`  
+   a _boolean_ representing whether the workplace is reserved (booked)_at this moment_ by an end user
 
-An example of the data as found in the `Message` attribute of the notification payload:
+These events occur whenever a booking starts or ends.
+
+
+##### example
+
+An example of the data (for an event *originating from an occupancy sensor*) as found in the `Message` attribute of the notification payload:
 ```
 [
     {    
@@ -165,7 +196,7 @@ An example of the data as found in the `Message` attribute of the notification p
 ```
 
 
-### _headcount_ sensor data events 
+### headcount fields 
 
 Data events *that originate from a headcount sensor* contain these specific fields:
 * `peak`  
@@ -175,7 +206,7 @@ Data events *that originate from a headcount sensor* contain these specific fiel
 
 These events occur at regular intervals, typically every 10 minutes.
 
-#### example
+##### example
 
 An example of the data as found in the `Message` attribute of the notification payload:
 ```
@@ -191,32 +222,6 @@ An example of the data as found in the `Message` attribute of the notification p
         "time_zone": "Europe/Amsterdam",
         "peak": 3,
         "average": 2.3
-    }
-]
-```
-
-
-### _occupancies_ booking-based data events
-
-Data events *that originate from a booking* contain this specific field:
-* `reserved`  
-   a _boolean_ representing whether the workplace is reserved (booked)_at this moment_ by an end user
-
-These events occur whenever a booking starts or ends.
-
-#### example
-
-An example of the data as found in the `Message` attribute of the notification payload:
-```
-[
-    {    
-        "timestamp_utc": "2020-01-16T13:42:42.000Z”,
-        "source": “reservation",
-        "workplace_id": 5174,
-        "location_id": 61,
-        "organization_id": 31,
-        "time_zone": "Europe/Amsterdam",
-        "reserved": false
     }
 ]
 ```
