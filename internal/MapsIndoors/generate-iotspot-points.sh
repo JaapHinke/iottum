@@ -10,10 +10,17 @@
 
 ##### Constants #####
 
-# The number of columns to be used in the initial grid where the new points will be placed. 
+# Grid origin's position relative to building's "bounding box".
+# Eg, 0.5 / 0.5 will put the origin in the center.
 
-GRID_WIDTH=10
+# TO DO: Verify:
+# In the Eastern hemisphere, 0 is the left edge of the bounding box and 1 is the right edge.
+# In the Western hemisphere, 0 is the right edge of the bounding box and 1 is the left edge.
+GRID_RELATIVE_ORIGIN_HORIZONTAL=1.0
 
+# In the Northern hemisphere, 0 is the bottom of the bounding box and 1 is the top.
+# In the Southern hemisphere, 0 is the top of the bounding box and 1 is the bottom.
+GRID_RELATIVE_ORIGIN_VERTICAL=0.5
 
 # Distance in degrees between points on the initial grid.
 
@@ -62,7 +69,7 @@ IOTSPOT_LOCATION_TYPES_TMP_FILE=iotspot-location-types-TMP.json
 MAPSINDOORS_GEODATA_TMP_FILE=geodata-TMP.json
 
 # The new points to be created for the selected solution.
-MAPSINDOORS_NEW_POINTS_TMP_FILE=new-points-TMP.json
+MAPSINDOORS_POINTS_INPUT_FILE=points-input.json
 
 
 # Output files
@@ -71,10 +78,10 @@ MAPSINDOORS_NEW_POINTS_TMP_FILE=new-points-TMP.json
 # Note: "display type" is the API term, "location type" is the CMS term.
 
 # The ids of the created location types (if any).
-CREATED_LOCATION_TYPES_FILE=created-location-types.json
+MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE=created-location-types.json
 
 # The ids of the created points (if any).
-CREATED_POINTS_FILE_SUFFIX=created-points.json
+MAPSINDOORS_CREATED_POINTS_IDS_FILE=created-points-ids.json
 
 
 
@@ -85,7 +92,7 @@ CREATED_POINTS_FILE_SUFFIX=created-points.json
 rm -f $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE
 rm -f $IOTSPOT_LOCATION_TYPES_TMP_FILE
 rm -f $MAPSINDOORS_GEODATA_TMP_FILE
-rm -f $MAPSINDOORS_NEW_POINTS_TMP_FILE
+rm -f $MAPSINDOORS_POINTS_INPUT_FILE
 
 
 
@@ -133,6 +140,8 @@ awk -F"\",\"" 'NR>1 {
     row = ($5 != prev_zone_id) ? row + 1 : row;
     column = ($5 != prev_zone_id) ? 0 : column;
     column = (($5 == prev_zone_id) && ($7 != prev_cluster_id)) ? column + 1.4 : column + 1;
+    row = (column > 21) ? row + 1 : row;
+    column = (column > 21) ? 1 : column;
     print "dummy," row "," column "," $3 "," $4 "," $5 "," $6 "," $7 "," $8 "," $9 "," $10 "," $11 "," $12 "," $13 "," $14;
     prev_floor = $3;
     prev_zone_id = $5;
@@ -166,12 +175,14 @@ if [ $ACCESS_TOKEN ] ;then
 else
     echo "Request access token from MapsIndoors CMS ..."
 
-    read -p 'username: ' USERNAME
-    read -s -p 'password: ' PASSWORD
+    # zsh uses '?' prefix instead of '-p'
+    # read -p 'username: ' MAPSINDOORS_USERNAME
+    read '?username: ' MAPSINDOORS_USERNAME
+    read -s '?password: ' MAPSINDOORS_PASSWORD
 
     # Get access token response and parse.
     RESPONSE=$(curl -# --request POST \
-    --data "grant_type=password&client_id=client&username=$USERNAME&password=$PASSWORD" \
+    --data "grant_type=password&client_id=client&username=$MAPSINDOORS_USERNAME&password=$MAPSINDOORS_PASSWORD" \
     https://auth.mapsindoors.com/connect/token)
 
     export ACCESS_TOKEN=$(echo $RESPONSE  | jq -r .access_token)
@@ -197,6 +208,7 @@ echo $SOLUTIONS | jq -c '.[] | { id, name }'
 
 # Prompt user to select datasetId.
 echo
+echo "IMPORTANT: If the solution uses an API Key or an Extended App Security key (see CMS), then use that instead of the 'id'"
 echo "Copy & paste 'id' for the solution below, then press Enter:"
 if [ $DATASET_ID ] ; then
     # Parse solution name.
@@ -205,9 +217,20 @@ if [ $DATASET_ID ] ; then
     if [ "$SOLUTION_NAME" ] ; then
         echo "To keep current selection: $DATASET_ID ($SOLUTION_NAME) just press Enter."
     else
-        echo "(Note: Previously selected dataset with id: $DATASET_ID can no longer be found in available datasets.)"
-        # Delete existing DATASET_ID since it cannot be used (at least not by the currently logged in account). 
-        unset DATASET_ID
+
+        # TO DO: Code duplicate, used again below. Consolidate?
+        # In case an app key was used instead of a selection from the list, the dataset details need to be obtained using the key.
+        # (Therefore not reusing the dataset data obtained in the previous call for all datasets.)
+        SOLUTION=$(curl -# -X GET "https://integration.mapsindoors.com/$DATASET_ID/api/dataset" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN")
+
+        # Parse solution name.
+        SOLUTION_NAME=$(echo $SOLUTION | jq -r '.name')
+
+        if [ "$SOLUTION_NAME" ] ; then
+            echo "To keep current selection: $DATASET_ID ($SOLUTION_NAME) just press Enter."
+        else
+            echo "(Note: Previously selected dataset with id/key: $DATASET_ID can no longer be found.)"
+        fi
     fi
 fi
 
@@ -217,8 +240,14 @@ read
 # Use the input. If there is no reply, keep using existing DATASET_ID.
 export DATASET_ID=${REPLY:-$DATASET_ID}
 
+
+
+# In case an app key was used instead of a selection from the list, the dataset details need to be obtained using the key.
+# (Therefore not reusing the dataset data obtained in the previous call for all datasets.)
+SOLUTION=$(curl -# -X GET "https://integration.mapsindoors.com/$DATASET_ID/api/dataset" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN")
+
 # Parse solution name.
-SOLUTION_NAME=$(echo $SOLUTIONS | jq -r '.[] | select(.id=="'$DATASET_ID'") | .name')
+SOLUTION_NAME=$(echo $SOLUTION | jq -r '.name')
 echo Selected solution: $SOLUTION_NAME
 
 
@@ -229,25 +258,25 @@ echo Selected solution: $SOLUTION_NAME
 
 # Get languages used for this solution.
 
-LANGUAGES=$(echo $SOLUTIONS | jq -r '.[] | select(.id=="'$DATASET_ID'") | .availableLanguages')
+LANGUAGES=$(echo $SOLUTION | jq -r '.availableLanguages')
 echo Solution languages: $LANGUAGES
 
 # Determine languages in script output (= API input).
 
 # Assumption is that there will be at least 1 language.
-LANG_1=$(echo $SOLUTIONS | jq -r '.[] | select(.id=="'$DATASET_ID'") | .availableLanguages | .[0]')
+LANG_1=$(echo $SOLUTION | jq -r '.availableLanguages | .[0]')
 
-LANG_2=$(echo $SOLUTIONS | jq -r '.[] | select(.id=="'$DATASET_ID'") | .availableLanguages | .[1]')
+LANG_2=$(echo $SOLUTION | jq -r '.availableLanguages | .[1]')
 # If there is no second language, then default LANG_2 to same as LANG_1.
 # In the code below generating the points JSON it looks like it will then generate two identical entries but since they are identical, only one is actually generated.
-if [ "$LANG_2" == "null" ] ;then
+if [ "$LANG_2" = "null" ] ;then
     LANG_2=$LANG_1
 fi
 
-LANG_3=$(echo $SOLUTIONS | jq -r '.[] | select(.id=="'$DATASET_ID'") | .availableLanguages | .[2]')
+LANG_3=$(echo $SOLUTION | jq -r '.availableLanguages | .[2]')
 # If there is no third language, then default LANG_3 to same as LANG_1.
 # In the code below generating the points JSON it looks like it will then generate two identical entries but since they are identical, only one is actually generated.
-if [ "$LANG_3" == "null" ] ;then
+if [ "$LANG_3" = "null" ] ;then
     LANG_3=$LANG_1
 fi
 
@@ -277,9 +306,9 @@ if [ $DISPLAY_TYPE_ID_DESK ] && [ $DISPLAY_TYPE_ID_ROOM ] ;then
 else
 
     echo "No iotspot location types found."
-    read -p "Continue to create the two location types for iotspot points (y/N)? "
+    read "?Continue to create the two location types for iotspot points (y/N)? "
 
-    if [ "$REPLY" == "y" ] ;then
+    if [ "$REPLY" = "y" ] ;then
 
         # Use jq to parse the JSON "base" file, but instead of using the properties attributes "as is", reassign the English name and description to whatever languages the solutions uses (up to 3).
         # If LANG_1, LANG_2, and/or LANG_3 overlap, then only a single attribute will be generated for each language.
@@ -304,22 +333,21 @@ else
 
         echo
         echo "Uploading location types to MapsIndoors ..."
-        curl -# -X POST "https://integration.mapsindoors.com/$DATASET_ID/api/displaytypes" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d @$IOTSPOT_LOCATION_TYPES_TMP_FILE > $CREATED_LOCATION_TYPES_FILE
+        curl -# -X POST "https://integration.mapsindoors.com/$DATASET_ID/api/displaytypes" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d @$IOTSPOT_LOCATION_TYPES_TMP_FILE > $MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE
 
         echo "MapsIndoors response (returned ids of created location types, if successful):"
-        cat $CREATED_LOCATION_TYPES_FILE | jq .
+        cat $MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE | jq .
 
-        cat $CREATED_LOCATION_TYPES_FILE | jq . > "$SOLUTION_NAME-$DATE-$CREATED_LOCATION_TYPES_FILE"
 
         # Determine display type for rooms and seats.
 
         echo Parsing IDs ...
-        RESULT=$(cat $CREATED_LOCATION_TYPES_FILE | jq '.[0]')
+        RESULT=$(cat $MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE | jq '.[0]')
         if [ $RESULT ] ;then
             export DISPLAY_TYPE_ID_DESK=$RESULT
         fi
 
-        RESULT=$(cat $CREATED_LOCATION_TYPES_FILE | jq '.[1]')
+        RESULT=$(cat $MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE | jq '.[1]')
         if [ $RESULT ] ;then
             export DISPLAY_TYPE_ID_ROOM=$RESULT
         fi
@@ -327,14 +355,19 @@ else
         echo "- location type id for iotspot (desk): $DISPLAY_TYPE_ID_DESK"
         echo "- location type id for iotspot (room): $DISPLAY_TYPE_ID_ROOM"
 
-        # Rename the file with ids of the created location types to include solution name and timestamp.
+        # Rename the file with ids of the created location types ids file to include solution name and timestamp.
 
         DATE=$(date '+%Y%m%d-%H%M%S')
-        # "Renaming" by creating a new file (using jq to format nicely) and then removing the old file.
-        cat $CREATED_LOCATION_TYPES_FILE | jq . > "$SOLUTION_NAME-$DATE-$CREATED_LOCATION_TYPES_FILE"
-        rm -f $CREATED_LOCATION_TYPES_FILE
 
-        echo "Saved in file: $SOLUTION_NAME-$DATE-$CREATED_LOCATION_TYPES_FILE"
+        # Location types output from MapsIndoors
+        NEW_FILE="$SOLUTION_NAME-$DATE-$MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE"
+        # cp "$MAPSINDOORS_POINTS_INPUT_FILE" "$NEW_FILE"
+        # Using jq to format nicely.
+        cat $MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE | jq . > "$NEW_FILE"
+        rm -f "$MAPSINDOORS_CREATED_LOCATION_TYPES_IDS_FILE"
+        echo "Saved MapsIndoors location types ids output in file: $NEW_FILE"
+
+
     else
         echo ... Canceled.
         return
@@ -414,13 +447,58 @@ jq '.[] | select(.parentId == "'$BUILDING_ID'") | select(.baseType | contains("f
 
 # Read user input (will be available in REPLY variable).
 echo  
-read -p "Do all floors found in $IOTSPOT_WORKPLACES_FILE have a corresponding floor in MapsIndoors (y/N)? "
+read "?Do all floors found in $IOTSPOT_WORKPLACES_FILE have a corresponding floor in MapsIndoors (y/N)? "
 
-if [ "$REPLY" == "${REPLY#[Yy]}" ] ;then
+if [ "$REPLY" = "${REPLY#[Yy]}" ] ;then
     echo ... Canceled.
     return
 fi
 
+
+##### Check if a START HERE point is defined.
+
+# TO DO: Limit to selected building. Is a bit hard since the parent of a point is a floor, not a building. So would have to check all floors in the building.
+# For now, we just look for the START HERE point.
+
+# Delete any lingering old values
+unset START_HERE_POINT_ID
+unset START_HERE_LONGITUDE
+unset START_HERE_LATITUDE
+
+START_HERE_POINT_ID=$(jq -r '.[] | select(.baseType | contains("poi")) | select(.properties["name@'$LANG_1'"] | ascii_upcase == "START HERE") | .id' $MAPSINDOORS_GEODATA_TMP_FILE)
+
+if [ $START_HERE_POINT_ID ] ; then
+
+    START_HERE_LONGITUDE=$(jq -r '.[] | select(.baseType | contains("poi")) | select(.properties["name@'$LANG_1'"] | ascii_upcase == "START HERE") | .geometry.coordinates[0]' $MAPSINDOORS_GEODATA_TMP_FILE)
+    START_HERE_LATITUDE=$(jq -r '.[] | select(.baseType | contains("poi")) | select(.properties["name@'$LANG_1'"] | ascii_upcase == "START HERE") | .geometry.coordinates[1]' $MAPSINDOORS_GEODATA_TMP_FILE)
+    echo "Found grid origin based on 'START HERE' point, longitude: $START_HERE_LONGITUDE latitude: $START_HERE_LATITUDE, id: $START_HERE_POINT_ID"
+
+    # Create ISO string data, to use in description allowing for easier cross reference to check-ins.
+    ACTIVE_TO=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+
+    # Hide the START HERE point by making it "active to" now.
+    START_HERE_POINT_UPDATE="[
+        {
+            \"id\": \"$START_HERE_POINT_ID\",
+        \"baseTypeProperties\": {
+            \"activeto\": \"$ACTIVE_TO\"
+            }
+        }
+    ]"
+
+    echo "Uploading update to hide START HERE point to MapsIndoors in solution $DATASET_ID ($SOLUTION_NAME) ..."
+
+    curl -# -X PUT "https://integration.mapsindoors.com/$DATASET_ID/api/geodata" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$START_HERE_POINT_UPDATE"
+
+    echo
+    read "?Continue with preparing the new points (y/N)? "
+
+    if [ "$REPLY" = "${REPLY#[yY]}" ] ;then
+        echo ... Canceled.
+        return
+    fi
+
+fi
 
 
 ##### Generating new points input file #####
@@ -438,8 +516,13 @@ fi
 # Some of the local variables are only used for intermediate calculations, these start with an "_" like: $_floor_level.
 
 # The rows and columns for the grid are calculated with awk, further above.
+
 # The position of the grid (to the right of the map "bounding box") and vertically in the middle is done below in jq.
+# This uses the GRID_RELATIVE_ORIGIN_HORIZONTAL and GRID_RELATIVE_ORIGIN_VERTICAL variables defined at the beginning of the script.
 # TO DO: Make sure the bounding box interpretation is correct for western and southern hemispheres.
+
+# The origin location for the grid can be overriden by defining a point on the map (any type of point, on any floor) with the name "START HERE".
+# For more detail, see calculation of START_HERE_LONGITUDE and START_HERE_LATITUDE, above.
 
 # Finally, most of the local variables are used to generate a 'point' element in the JSON output, resulting in a final JSON structure that can be used in the MapsIndoors API.
 # Note: The _iotspot_start_grid value for each entry is for iotspot debugging only and will be ignored by the API.
@@ -451,10 +534,14 @@ fi
 # Other fields:
 # 3=Floor, 4 not used, 5=Zone Id, 6=Zone, 7=Cluster Id, 8=Seqno, 9=Workplace Id, 10=Workplace Code, 11=Category, 13 not used 12=Workplace Type, 14=Name, remainder not used 
 
+# jq is used to reverse the array so that the icons are placed with leftmost ones in the foreground. For some reason, this does not work for rows, as lower rows are always covering higher placed rows, regardless of when they were placed onto the map.
+
 jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
     [inputs
     | . / "\n"
-      | (.[]  | select(length > 0) | . / ",") as $fields
+      | reverse
+      | (.[]
+      | select(length > 0) | . / ",") as $fields
       | ($fields[1] | tonumber) as $grid_row
       | ($fields[2] | tonumber) as $grid_column
       | $fields[3] as $_floor_level
@@ -463,8 +550,10 @@ jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
       | $floor_data[$_floor_level].boundingbox[1] as $_min_latitude
       | $floor_data[$_floor_level].boundingbox[2] as $_max_longitude
       | $floor_data[$_floor_level].boundingbox[3] as $_max_latitude
-      | $_max_longitude as $longitude
-      | (($_min_latitude + $_max_latitude)/2) as $latitude
+      | ($_min_longitude + '$GRID_RELATIVE_ORIGIN_HORIZONTAL' * ($_max_longitude - $_min_longitude)) as $_longitude_calculated
+      | ($_min_latitude + '$GRID_RELATIVE_ORIGIN_VERTICAL' * ($_max_latitude - $_min_latitude)) as $_latitude_calculated
+      | (if ("'$START_HERE_LONGITUDE'" != "") then ("'$START_HERE_LONGITUDE'" | tonumber) else $_longitude_calculated end) as $longitude
+      | (if ("'$START_HERE_LATITUDE'" != "") then ("'$START_HERE_LATITUDE'" | tonumber) else $_latitude_calculated end) as $latitude
       | $fields[6] as $zone
       | $fields[9] as $workplace_id
       | $fields[10] as $workplace_code
@@ -506,48 +595,65 @@ jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
             },
         }
     ]
-' $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE > $MAPSINDOORS_NEW_POINTS_TMP_FILE
+' $IOTSPOT_NUMBERED_WORKPLACES_TMP_FILE > $MAPSINDOORS_POINTS_INPUT_FILE
 
 echo
-echo "Generated temporary $MAPSINDOORS_NEW_POINTS_TMP_FILE file with contents:"
+echo "Generated $MAPSINDOORS_POINTS_INPUT_FILE file with contents:"
 # Use jq for nice formatting.
-cat $MAPSINDOORS_NEW_POINTS_TMP_FILE | jq .
+cat $MAPSINDOORS_POINTS_INPUT_FILE | jq .
 
-
+COUNT=$(cat $MAPSINDOORS_POINTS_INPUT_FILE | jq '. | length')
 
 ##### Ask user to confirm upload of new points #####
 
 echo
-echo "These points will be added to building $BUILDING_ID ('$BUILDING_NAME') in solution $DATASET_ID ($SOLUTION_NAME)."
+echo "Total of: $COUNT points will be added to building: $BUILDING_ID ('$BUILDING_NAME') in solution: $DATASET_ID ($SOLUTION_NAME)."
 
 # Read user input (will be available in REPLY variable).
 echo
-read -p "Upload the new points to MapsIndoors (y/N)? "
+read "?Upload the new points to MapsIndoors (y/N)? "
 
-if [ "$REPLY" == "${REPLY#[yY]}" ] ;then
+if [ "$REPLY" = "${REPLY#[yY]}" ] ;then
     echo ... Canceled.
     return
 fi
 
 echo
-echo "Uploading points to MapsIndoors for building $BUILDING_ID ('$BUILDING_NAME') in solution $DATASET_ID ($SOLUTION_NAME) ..."
+echo "Uploading points to MapsIndoors for building: $BUILDING_ID ('$BUILDING_NAME') in solution: $DATASET_ID ($SOLUTION_NAME) ..."
 
-curl -# -X POST "https://integration.mapsindoors.com/$DATASET_ID/api/geodata" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d @$MAPSINDOORS_NEW_POINTS_TMP_FILE > $CREATED_POINTS_FILE_SUFFIX
+curl -# -X POST --http1.1  "https://integration.mapsindoors.com/$DATASET_ID/api/geodata" -H "accept: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d @$MAPSINDOORS_POINTS_INPUT_FILE > $MAPSINDOORS_CREATED_POINTS_IDS_FILE
 
 echo
 echo "MapsIndoors response (returned ids of created points, if successful):"
 # Pipe result into jq for nice formatting.
-cat $CREATED_POINTS_FILE_SUFFIX | jq '.'
+cat $MAPSINDOORS_CREATED_POINTS_IDS_FILE | jq '.'
 
-# Rename the file with ids of the created points to include solution name and timestamp.
+# Keep the input and output files for future reference.
+# To do this, rename them to include the solution name and timestamp.
 
 DATE=$(date '+%Y%m%d-%H%M%S')
-# "Renaming" by creating a new file (using jq to format nicely) and then removing the old file.
-CREATED_POINTS_FILE="$SOLUTION_NAME-$DATE-$CREATED_POINTS_FILE_SUFFIX"
-cat $MAPSINDOORS_NEW_POINTS_TMP_FILE | jq . > "$CREATED_POINTS_FILE"
-rm -f $MAPSINDOORS_NEW_POINTS_TMP_FILE
 
-echo "Saved in file: $CREATED_POINTS_FILE"
+# Exported CSV file from iotmin
+# The original file is not removed to allow for reruns, if needed.
+NEW_FILE="$SOLUTION_NAME-$DATE-$IOTSPOT_WORKPLACES_FILE"
+cp "$IOTSPOT_WORKPLACES_FILE" "$NEW_FILE"
+echo "Saved iotspot workplaces export in file: $NEW_FILE"
+
+# Points input generated by script
+NEW_FILE="$SOLUTION_NAME-$DATE-$MAPSINDOORS_POINTS_INPUT_FILE"
+# cp "$MAPSINDOORS_POINTS_INPUT_FILE" "$NEW_FILE"
+# Using jq to format nicely.
+cat $MAPSINDOORS_POINTS_INPUT_FILE | jq . > "$NEW_FILE"
+rm -f "$MAPSINDOORS_POINTS_INPUT_FILE"
+echo "Saved MapsIndoors points input in file: $NEW_FILE"
+
+# Points output from MapsIndoors
+NEW_FILE="$SOLUTION_NAME-$DATE-$MAPSINDOORS_CREATED_POINTS_IDS_FILE"
+# cp "$MAPSINDOORS_POINTS_INPUT_FILE" "$NEW_FILE"
+# Using jq to format nicely.
+cat $MAPSINDOORS_CREATED_POINTS_IDS_FILE | jq . > "$NEW_FILE"
+rm -f "$MAPSINDOORS_CREATED_POINTS_IDS_FILE"
+echo "Saved MapsIndoors points ids output in file: $NEW_FILE"
 
 
 
@@ -564,4 +670,9 @@ echo "Saved in file: $CREATED_POINTS_FILE"
 # jq '.[] | select(.baseType | contains("poi")) | select(.displayTypeId | contains("'$DISPLAY_TYPE_ID_ROOM'")) ' $MAPSINDOORS_GEODATA_TMP_FILE  
 
 # points with coordinates
-# jq '[.[] | select(.baseType | contains("poi")) | { name: .properties["name@'$LANG_1'"], coordinates: .geometry.coordinates, displayTypeId } ]'
+# jq '[.[] | select(.baseType | contains("poi")) | { name: .properties["name@'$LANG_1'"], coordinates: .geometry.coordinates, displayTypeId } ]' $MAPSINDOORS_GEODATA_TMP_FILE  
+
+
+jq '[.[] | select(.baseType | contains("poi")) | select(.properties["name@'$LANG_1'"] | contains("START HERE")) | { name: .properties["name@'$LANG_1'"], coordinates: .geometry.coordinates, displayTypeId } ]' $MAPSINDOORS_GEODATA_TMP_FILE  
+
+
