@@ -135,6 +135,8 @@ PATH=$(pwd):$PATH
 
 # TO DO: Check this work correctly for multiple floors.
 
+# Note: The last dummy value is a workaround that is needed because the jq parsing is done in a simple manner with '","' as the separator. Otherwise the last (now penultimate) field is not parsed correcty.
+
 awk -F"\",\"" 'NR>1 {
     row = ($3 != prev_floor) ? 0 : row;
     row = ($5 != prev_zone_id) ? row + 1 : row;
@@ -142,7 +144,7 @@ awk -F"\",\"" 'NR>1 {
     column = (($5 == prev_zone_id) && ($7 != prev_cluster_id)) ? column + 1.4 : column + 1;
     row = (column > 21) ? row + 1 : row;
     column = (column > 21) ? 1 : column;
-    print "dummy," row "," column "," $3 "," $4 "," $5 "," $6 "," $7 "," $8 "," $9 "," $10 "," $11 "," $12 "," $13 "," $14;
+    print "\"dummy\",\"" row "\",\"" column "\",\"" $3 "\",\"" $4 "\"\",\"" $5 "\",\"" $6 "\",\"" $7 "\",\"" $8 "\",\"" $9 "\",\"" $10 "\",\"" $11 "\",\"" $12 "\",\"" $13 "\",\"" $14 "\",\"" dummy "\"";
     prev_floor = $3;
     prev_zone_id = $5;
     prev_cluster_id = $7
@@ -541,7 +543,7 @@ jq -Rsn --argjson floor_data "${FLOOR_DATA[@]}" '
     | . / "\n"
       | reverse
       | (.[]
-      | select(length > 0) | . / ",") as $fields
+      | select(length > 0) | . / "\",\"") as $fields
       | ($fields[1] | tonumber) as $grid_row
       | ($fields[2] | tonumber) as $grid_column
       | $fields[3] as $_floor_level
