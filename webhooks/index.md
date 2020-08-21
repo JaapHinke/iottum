@@ -61,7 +61,7 @@ An example of an SNS notification message, containing a single climate data even
 {
     "Type" : "Notification",
     "MessageId" : "920b758a-165f-5905-9bdd-232addf57ae7",
-    "TopicArn" : "arn:aws:sns:eu-central-1:951137801000:push-api-data-events-test",
+    "TopicArn" : "arn:aws:sns:eu-central-1:951137801000:iotspot-webhooks-data-events-v1",
     "Subject" : "iotspot data events",
     "Message" : "[{\"timestamp_utc\":\"2020-01-21T09:46:50.000Z\",\"device_id\":\"8931088217011846857\",\"sensor_id\":\"4191\",\"source\":\"climate sensor\",\"temperature\":20.04,\"pressure\":1042.91,\"humidity\":38.675,\"gas_voc\":15441,\"iaq\":\"159\",\"iaq_accuracy\":3,\"voc\":\"2.437\",\"co2\":\"1297.760\",\"workplace_id\":4738,\"location_id\":13,\"organization_id\":3,\"time_zone\":\"Europe/Amsterdam\"}]",
     "Timestamp" : "2020-01-21T09:50:34.828Z",
